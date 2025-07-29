@@ -1,0 +1,35 @@
+{
+    "auth": {
+        "sign_in": "Sign In",
+        "sign_up": "Create Account",
+        "username": "Email",
+        "password": "Password",
+        "forgot_password": "Forgot your password?"
+    },
+    "header": {
+        "welcome": "Welcome",
+        "logout": "Log Out"
+    },
+    "sidebar": {
+        "account_label": "ACCOUNT",
+        "account_payments_label": "Payments",
+        "account_settings_label": "Settings"
+    },
+    "payments": {},
+    "settings": {
+        "header": "User data",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "header_invoice": "Invoice data",
+        "company_name": "Company name",
+        "tax_number": "Tax number",
+        "street": "Street",
+        "city": "City",
+        "postal_code": "Postal code",
+        "data_saved": "User settings saved."
+    },
+    "reusable":{
+        "save": "Save",
+        "saved": "Saved"
+    }
+}
