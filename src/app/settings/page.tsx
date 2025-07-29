@@ -69,7 +69,7 @@ export default function Settings() {
     };
 
     loadProfile();
-  }, [userId]);
+  }, [userId, client.models.UserProfile]);
 
   // Step 3: Save
   const save = async () => {

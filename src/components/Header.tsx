@@ -14,7 +14,6 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const attrs = (user as any).attributes;
   const displayName = user?.signInDetails?.loginId || user.username;
   const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
 
