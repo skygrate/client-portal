@@ -1,11 +1,7 @@
 import './globals.css';
-import { Amplify } from 'aws-amplify';
-import amplifyOutputs from '../../amplify_outputs.json'; // Gen2 outputs file
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import Providers from './Providers';
-
-Amplify.configure(amplifyOutputs);
 
 export const metadata = {
   title: 'Client Portal',
