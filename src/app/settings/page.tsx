@@ -6,6 +6,9 @@ import type { Schema } from "../../../amplify/data/resource";
 import { useTranslation } from "react-i18next";
 import { toast } from 'sonner';
 
+// instantiate client once (stable reference)
+const client = generateClient<Schema>();
+
 export default function Settings() {
   const [userId, setUserId] = useState<string | null>(null);
   const [firstName, setFirstName] = useState("");
@@ -17,27 +20,20 @@ export default function Settings() {
   const [companyAddressPostalCode, setCompanyAddressPostalCode] = useState("")
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation()
-  const client = generateClient<Schema>();
+
 
   // Step 1: Get the user's Cognito sub
   useEffect(() => {
-    const fetchSub = async () => {
+    (async () => {
       try {
-        const attributes = await fetchUserAttributes();
-        if (attributes.sub) {
-          console.log("🔐 Cognito user sub:", attributes.sub);
-          setUserId(attributes.sub);
-        } else {
-          console.warn("⚠️ No 'sub' found in user attributes.");
-          setLoading(false); // Fail early
-        }
-      } catch (error) {
-        console.error("❌ Failed to fetch user attributes:", error);
-        setLoading(false); // Avoid stuck loading
+        const attrs = await fetchUserAttributes();
+        if (attrs.sub) setUserId(attrs.sub);
+      } catch (e) {
+        console.error('fetchUserAttributes error', e);
+      } finally {
+        setLoading(false);
       }
-    };
-
-    fetchSub();
+    })();
   }, []);
 
   // Step 2: Load or create profile
@@ -80,26 +76,13 @@ export default function Settings() {
 
     try {
       const { data } = await client.models.UserProfile.get({ userId });
+      const payload = { userId, firstName, lastName, taxNumber, companyName, companyAddress, companyAddressCity, companyAddressPostalCode};
 
       if (data) {
-        await client.models.UserProfile.update({ userId, 
-          firstName, 
-          lastName, 
-          taxNumber, 
-          companyName, 
-          companyAddress, 
-          companyAddressCity, 
-          companyAddressPostalCode});
+        await client.models.UserProfile.update(payload);
         console.log("💾 Updated profile.");
       } else {
-        await client.models.UserProfile.create({ userId, 
-          firstName, 
-          lastName, 
-          taxNumber, 
-          companyName, 
-          companyAddress, 
-          companyAddressCity, 
-          companyAddressPostalCode});
+        await client.models.UserProfile.create(payload);
         console.log("🆕 Created new profile on save.");
       }
 
