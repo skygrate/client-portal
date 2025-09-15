@@ -5,7 +5,7 @@ import type { DomainItem } from "../types";
 const client = amplifyClient;
 
 export async function listByUser(userId: string): Promise<DomainItem[]> {
-  const res = await client.models.Domain.list({ where: { userId: { eq: userId } } });
+  const res = await client.models.Domain.list({ filter: { userId: { eq: userId } } });
   return (res.data as unknown as DomainItem[]) ?? [];
 }
 
