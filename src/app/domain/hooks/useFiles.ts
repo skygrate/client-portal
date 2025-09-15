@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { FileItem } from "../types";
 import { deleteFile, listFiles, uploadFile } from "@shared/services/storage";
 
@@ -9,6 +9,7 @@ const PAGE_SIZE = 50;
 export function useFiles(prefix: string) {
   const [files, setFiles] = useState<FileItem[]>([]);
   const [nextToken, setNextToken] = useState<string | undefined>();
+  const nextTokenRef = useRef<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -16,25 +17,27 @@ export function useFiles(prefix: string) {
     async (reset = false) => {
       setLoading(true);
       try {
-        const { items, nextToken } = await listFiles(prefix, {
+        const { items, nextToken: nt } = await listFiles(prefix, {
           pageSize: PAGE_SIZE,
-          nextToken: reset ? undefined : nextToken,
+          nextToken: reset ? undefined : nextTokenRef.current,
         });
         setFiles((prev) => (reset ? items : [...prev, ...items]));
-        setNextToken(nextToken);
+        setNextToken(nt);
+        nextTokenRef.current = nt;
       } finally {
         setLoading(false);
       }
     },
-    [prefix, nextToken]
+    [prefix]
   );
 
   useEffect(() => {
     // when prefix changes, reset and load first page
     setFiles([]);
     setNextToken(undefined);
+    nextTokenRef.current = undefined;
     void load(true);
-  }, [prefix]);
+  }, [prefix, load]);
 
   const refresh = useCallback(async () => load(true), [load]);
   const loadMore = useCallback(async () => load(false), [load]);

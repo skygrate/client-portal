@@ -3,15 +3,19 @@
 import { list, uploadData, remove } from "aws-amplify/storage";
 import type { FileItem } from "@/app/domain/types";
 
+type StorageListParams = { path: string; pageSize?: number; nextToken?: string };
+type StorageListResponse = { items: FileItem[]; nextToken?: string };
+
 export async function listFiles(prefix: string, opts?: { pageSize?: number; nextToken?: string }) {
   const resp = await list({
     path: prefix.endsWith("/") ? prefix : `${prefix}/`,
     pageSize: opts?.pageSize,
     nextToken: opts?.nextToken,
-  } as any);
+  } as StorageListParams);
+  const r = resp as unknown as StorageListResponse;
   return {
-    items: (resp.items as unknown as FileItem[]) ?? [],
-    nextToken: (resp as any).nextToken as string | undefined,
+    items: r.items ?? [],
+    nextToken: r.nextToken,
   };
 }
 
@@ -37,4 +41,3 @@ export async function deleteAllUnderPrefix(prefix: string) {
     nextToken = nt;
   } while (nextToken);
 }
-

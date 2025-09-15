@@ -20,7 +20,7 @@ export function FilePanel({ prefix, onError }: Props) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => refresh().catch((e) => onError?.(e?.message ?? String(e)))}
+            onClick={() => refresh().catch((e: unknown) => onError?.(extractErrorMessage(e, "Failed to refresh.")))}
             disabled={loading}
             className="rounded-lg px-3 py-1.5 border text-sm hover:bg-gray-100"
           >
@@ -36,8 +36,9 @@ export function FilePanel({ prefix, onError }: Props) {
                 try {
                   await upload(files);
                   alert(t("domain.upload_success"));
-                } catch (err: any) {
-                  onError?.(t("domain.upload_error") + (err?.message ? `: ${err.message}` : ""));
+                } catch (err: unknown) {
+                  const msg = extractErrorMessage(err, t("domain.upload_error"));
+                  onError?.(msg);
                 } finally {
                   input.value = "";
                 }
@@ -82,8 +83,8 @@ export function FilePanel({ prefix, onError }: Props) {
                       if (!ok) return;
                       try {
                         await remove(f);
-                      } catch (err: any) {
-                        onError?.(err?.message ?? "Failed to delete file.");
+                      } catch (err: unknown) {
+                        onError?.(extractErrorMessage(err, "Failed to delete file."));
                       }
                     }}
                     className="rounded-md px-2 py-1 border hover:bg-gray-50"
@@ -118,4 +119,13 @@ export function FilePanel({ prefix, onError }: Props) {
 
 function stripPrefix(path: string, prefix: string) {
   return path.startsWith(prefix) ? path.slice(prefix.length) : path;
+}
+
+function extractErrorMessage(err: unknown, fallback: string) {
+  if (typeof err === "string") return err;
+  if (err && typeof err === "object") {
+    const maybe = err as { message?: string; errors?: Array<{ message?: string }> };
+    return maybe.errors?.[0]?.message || maybe.message || fallback;
+  }
+  return fallback;
 }

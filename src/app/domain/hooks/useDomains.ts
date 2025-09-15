@@ -17,8 +17,9 @@ export function useDomains(userId: string | null) {
     try {
       const list = await listByUser(userId);
       setDomains(list);
-    } catch (e: any) {
-      setError(e?.message ?? "Failed to load domains.");
+    } catch (e: unknown) {
+      const msg = typeof e === 'object' && e && 'message' in e ? String((e as { message?: string }).message) : 'Failed to load domains.';
+      setError(msg);
     } finally {
       setLoading(false);
     }

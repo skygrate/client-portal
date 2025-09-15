@@ -29,9 +29,10 @@ export default function Settings() {
                 description: t("settings.data_saved"),
                 duration: 3000,
               });
-            } catch (e: any) {
+            } catch (e: unknown) {
+              const msg = typeof e === 'object' && e && 'message' in e ? String((e as { message?: string }).message) : 'Save failed.';
               toast.error(t("reusable.error", { defaultValue: "Error" }), {
-                description: e?.message ?? "Save failed.",
+                description: msg,
                 duration: 3000,
               });
             }

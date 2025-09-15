@@ -16,8 +16,11 @@ export function useCurrentUserId() {
         const sub = attrs.sub;
         if (!sub) throw new Error("Could not determine current user.");
         if (!cancelled) setUserId(sub);
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message ?? "Failed to load user.");
+      } catch (e: unknown) {
+        if (!cancelled) {
+          const msg = typeof e === 'object' && e && 'message' in e ? String((e as { message?: string }).message) : 'Failed to load user.';
+          setError(msg);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -29,4 +32,3 @@ export function useCurrentUserId() {
 
   return { userId, loading, error } as const;
 }
-

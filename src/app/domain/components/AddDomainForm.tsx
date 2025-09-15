@@ -41,8 +41,9 @@ export function AddDomainForm({ domains, disabled, onCreate, onError, onAfterCre
       await onCreate(normalizedDomain);
       setDomainInput("");
       onAfterCreate?.();
-    } catch (e: any) {
-      onError(e?.errors?.[0]?.message ?? e?.message ?? "Failed to add domain.");
+    } catch (e: unknown) {
+      const msg = extractErrorMessage(e, "Failed to add domain.");
+      onError(msg);
     } finally {
       setSubmitting(false);
     }
@@ -82,3 +83,11 @@ export function AddDomainForm({ domains, disabled, onCreate, onError, onAfterCre
   );
 }
 
+function extractErrorMessage(err: unknown, fallback: string) {
+  if (typeof err === "string") return err;
+  if (err && typeof err === "object") {
+    const maybe = err as { message?: string; errors?: Array<{ message?: string }> };
+    return maybe.errors?.[0]?.message || maybe.message || fallback;
+  }
+  return fallback;
+}

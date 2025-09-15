@@ -56,8 +56,11 @@ export function useUserProfile(userId: string | null) {
           await createUserProfile({ userId, firstName: "" });
           if (!cancelled) setProfile(emptyForm);
         }
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message ?? "Failed to load profile.");
+      } catch (e: unknown) {
+        if (!cancelled) {
+          const msg = typeof e === 'object' && e && 'message' in e ? String((e as { message?: string }).message) : 'Failed to load profile.';
+          setError(msg);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -81,4 +84,3 @@ export function useUserProfile(userId: string | null) {
 
   return { profile, setProfile, loading, error, save } as const;
 }
-

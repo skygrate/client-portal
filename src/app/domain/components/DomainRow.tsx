@@ -28,8 +28,9 @@ export function DomainRow({ domain, isOpen, onToggle, onDelete, onError }: Props
     setBusy(true);
     try {
       await onDelete(domain.name);
-    } catch (e: any) {
-      onError(e?.errors?.[0]?.message ?? e?.message ?? "Failed to delete domain.");
+    } catch (e: unknown) {
+      const msg = extractErrorMessage(e, "Failed to delete domain.");
+      onError(msg);
     } finally {
       setBusy(false);
     }
@@ -76,3 +77,11 @@ export function DomainRow({ domain, isOpen, onToggle, onDelete, onError }: Props
   );
 }
 
+function extractErrorMessage(err: unknown, fallback: string) {
+  if (typeof err === "string") return err;
+  if (err && typeof err === "object") {
+    const maybe = err as { message?: string; errors?: Array<{ message?: string }> };
+    return maybe.errors?.[0]?.message || maybe.message || fallback;
+  }
+  return fallback;
+}
