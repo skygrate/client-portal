@@ -1,5 +1,9 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+const DomainParameters = a.customType({
+  s3_prefix: a.string().required(),
+});
+
 const schema = a.schema({
   UserProfile: a
     .model({
@@ -14,6 +18,16 @@ const schema = a.schema({
     })
     .identifier(['userId'])
     .authorization((allow) => [allow.owner()]),
+
+  Domain: a
+    .model({
+      userId: a.id().required(),
+      name: a.string().required(),
+      status: a.string().required(),
+      parameters: DomainParameters
+    })
+    .identifier(["userId", "name"])
+    .authorization(allow => [allow.ownerDefinedIn('userId')])
 });
 
 export type Schema = ClientSchema<typeof schema>

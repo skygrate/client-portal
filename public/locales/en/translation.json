@@ -11,11 +11,13 @@
         "logout": "Log Out"
     },
     "sidebar": {
+        "services_label": "SERVICES", 
+        "services_domain_label": "Domains",
         "account_label": "ACCOUNT",
         "account_payments_label": "Payments",
         "account_settings_label": "Settings"
     },
-    "payments": {},
+    "payment": {},
     "settings": {
         "header": "User data",
         "first_name": "First name",
@@ -28,7 +30,42 @@
         "postal_code": "Postal code",
         "data_saved": "User settings saved."
     },
+    "domain": {
+        "header": "Domains",
+        "add_domain_label": "Add a domain",
+        "add_domain_description": "Enter a domain you own (e.g., example.com).",
+        "domain_list_label": "Your domains",
+        "location": "Location",
+        "no_domains_yet": "You haven’t added any domains yet.",
+        "upload_prompt": "Choose files to upload to this site.",
+        "upload_success": "Uploaded succesfully",
+        "upload_error": "Upload failed",
+        "manage_files": "Manage files",
+        "status_label": "Status",
+        "invalid_domain_hint": "That doesn’t look like a valid domain.",
+        "no_files_yet": "This folder is empty",
+        "col_name": "Name",
+        "col_size": "Size",
+        "col_modified": "Last modified",
+        "col_actions": "Actions",
+        "prefix_label": "Prefix",
+        "confirm_delete_file": "Delete “{{file}}”?",
+        "confirm_delete_domain": "Delete domain “{{domain}}” and all its files? This cannot be undone.",
+        "new_folder_ph": "New folder name",
+        "create_folder": "Create folder",
+        "invalid_folder_name": "Folder name contains invalid characters."
+    },
     "reusable":{
+        "add": "Add",
+        "adding": "Adding...",
+        "close": "Close",
+        "delete": "Delete",
+        "deleting": "Deleting…",
+        "loading": "Loding...",
+        "load_more": "Load more",
+        "upload": "Upload",
+        "uploading": "Uploading...",
+        "refresh": "Refresh",
         "save": "Save",
         "saved": "Saved"
     }

@@ -1,0 +1,40 @@
+"use client";
+
+import { list, uploadData, remove } from "aws-amplify/storage";
+import type { FileItem } from "@/app/domain/types";
+
+export async function listFiles(prefix: string, opts?: { pageSize?: number; nextToken?: string }) {
+  const resp = await list({
+    path: prefix.endsWith("/") ? prefix : `${prefix}/`,
+    pageSize: opts?.pageSize,
+    nextToken: opts?.nextToken,
+  } as any);
+  return {
+    items: (resp.items as unknown as FileItem[]) ?? [],
+    nextToken: (resp as any).nextToken as string | undefined,
+  };
+}
+
+export async function uploadFile(prefix: string, file: File) {
+  await uploadData({
+    path: `${prefix}${file.name}`,
+    data: file,
+    options: { contentType: file.type || "application/octet-stream" },
+  }).result;
+}
+
+export async function deleteFile(path: string) {
+  await remove({ path });
+}
+
+export async function deleteAllUnderPrefix(prefix: string) {
+  let nextToken: string | undefined = undefined;
+  do {
+    const { items, nextToken: nt } = await listFiles(prefix, { pageSize: 1000, nextToken });
+    for (const it of items) {
+      await deleteFile(it.path);
+    }
+    nextToken = nt;
+  } while (nextToken);
+}
+
