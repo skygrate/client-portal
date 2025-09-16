@@ -1,7 +1,7 @@
 "use client";
 
 import { list, uploadData, remove } from "aws-amplify/storage";
-import type { FileItem } from "@/app/domain/types";
+import type { FileItem } from "@/app/files/types";
 
 type StorageListParams = { path: string; pageSize?: number; nextToken?: string };
 type StorageListResponse = { items: FileItem[]; nextToken?: string };

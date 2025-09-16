@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 import { useFiles } from "../hooks/useFiles";
-import { formatBytes, formatDate } from "../utils/format";
+import { formatBytes, formatDate } from "@shared/utils/format";
 
 type Props = {
   prefix: string;
@@ -16,7 +16,7 @@ export function FilePanel({ prefix, onError }: Props) {
   return (
     <div className="mt-3 rounded-xl border p-3 bg-gray-50">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm text-gray-700">{t("domain.upload_prompt")}</p>
+        <p className="text-sm text-gray-700">{t("files.upload_prompt")}</p>
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -35,9 +35,9 @@ export function FilePanel({ prefix, onError }: Props) {
               if (files && files.length > 0) {
                 try {
                   await upload(files);
-                  alert(t("domain.upload_success"));
+                  alert(t("files.upload_success"));
                 } catch (err: unknown) {
-                  const msg = extractErrorMessage(err, t("domain.upload_error"));
+                  const msg = extractErrorMessage(err, t("files.upload_error"));
                   onError?.(msg);
                 } finally {
                   input.value = "";
@@ -53,17 +53,17 @@ export function FilePanel({ prefix, onError }: Props) {
         <table className="w-full text-sm">
           <thead className="bg-gray-100 text-gray-600">
             <tr>
-              <th className="text-left px-3 py-2 w-1/2">{t("domain.col_name", "Name")}</th>
-              <th className="text-left px-3 py-2">{t("domain.col_size", "Size")}</th>
-              <th className="text-left px-3 py-2">{t("domain.col_modified", "Last modified")}</th>
-              <th className="text-right px-3 py-2">{t("domain.col_actions", "Actions")}</th>
+              <th className="text-left px-3 py-2 w-1/2">{t("files.col_name", "Name")}</th>
+              <th className="text-left px-3 py-2">{t("files.col_size", "Size")}</th>
+              <th className="text-left px-3 py-2">{t("files.col_modified", "Last modified")}</th>
+              <th className="text-right px-3 py-2">{t("files.col_actions", "Actions")}</th>
             </tr>
           </thead>
           <tbody>
             {files.length === 0 && (
               <tr>
                 <td colSpan={4} className="px-3 py-6 text-center text-gray-500">
-                  {loading ? t("reusable.loading") : t("domain.no_files_yet")}
+                  {loading ? t("reusable.loading") : t("files.no_files_yet")}
                 </td>
               </tr>
             )}
@@ -79,7 +79,7 @@ export function FilePanel({ prefix, onError }: Props) {
                     type="button"
                     onClick={async () => {
                       const filename = stripPrefix(f.path, prefix);
-                      const ok = confirm(t("domain.confirm_delete_file", { file: filename }));
+                      const ok = confirm(t("files.confirm_delete_file", { file: filename }));
                       if (!ok) return;
                       try {
                         await remove(f);
@@ -100,12 +100,12 @@ export function FilePanel({ prefix, onError }: Props) {
 
       <div className="mt-2 flex justify-between items-center">
         <span className="text-xs text-gray-500">
-          {t("domain.prefix_label", "Prefix")}: <code>{prefix}</code>
+          {t("files.prefix_label", "Prefix")}: <code>{prefix}</code>
         </span>
         {nextToken && (
           <button
             type="button"
-            onClick={() => loadMore().catch((e) => onError?.(e?.message ?? String(e)))}
+            onClick={() => loadMore().catch((e) => onError?.(extractErrorMessage(e, "Failed to load more.")))}
             className="rounded-lg px-3 py-1.5 border text-sm hover:bg-gray-100"
             disabled={loading}
           >

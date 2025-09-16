@@ -4,7 +4,8 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 const servicesMenuItems = [
-  {href: '/domain', labelKey: 'sidebar.services_domain_label'}
+  { href: '/domain', labelKey: 'sidebar.services_domain_label' },
+  { href: '/files',  labelKey: 'sidebar.services_files_label' },
 ]
 const accountMenuItems = [
   { href: '/settings', labelKey: 'sidebar.account_settings_label' },

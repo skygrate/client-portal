@@ -13,6 +13,7 @@
     "sidebar": {
         "services_label": "SERVICES", 
         "services_domain_label": "Domains",
+        "services_files_label": "Files",
         "account_label": "ACCOUNT",
         "account_payments_label": "Payments",
         "account_settings_label": "Settings"
@@ -31,8 +32,8 @@
         "data_saved": "User settings saved."
     },
     "domain": {
-        "header": "Domains",
-        "add_domain_label": "Add a domain",
+      "header": "Domains",
+      "add_domain_label": "Add a domain",
         "add_domain_description": "Enter a domain you own (e.g., example.com).",
         "domain_list_label": "Your domains",
         "location": "Location",
@@ -53,7 +54,21 @@
         "confirm_delete_domain": "Delete domain “{{domain}}” and all its files? This cannot be undone.",
         "new_folder_ph": "New folder name",
         "create_folder": "Create folder",
-        "invalid_folder_name": "Folder name contains invalid characters."
+      "invalid_folder_name": "Folder name contains invalid characters."
+    },
+    "files": {
+        "domain_list_label": "Your domains",
+        "no_domains_yet": "You haven’t added any domains yet.",
+        "upload_prompt": "Choose files to upload to this site.",
+        "upload_success": "Uploaded succesfully",
+        "upload_error": "Upload failed",
+        "no_files_yet": "This folder is empty",
+        "col_name": "Name",
+        "col_size": "Size",
+        "col_modified": "Last modified",
+        "col_actions": "Actions",
+        "prefix_label": "Prefix",
+        "confirm_delete_file": "Delete “{{file}}”?"
     },
     "reusable":{
         "add": "Add",

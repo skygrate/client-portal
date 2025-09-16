@@ -9,9 +9,9 @@ const PAGE_SIZE = 50;
 export function useFiles(prefix: string) {
   const [files, setFiles] = useState<FileItem[]>([]);
   const [nextToken, setNextToken] = useState<string | undefined>();
-  const nextTokenRef = useRef<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const nextTokenRef = useRef<string | undefined>(undefined);
 
   const load = useCallback(
     async (reset = false) => {
@@ -32,7 +32,6 @@ export function useFiles(prefix: string) {
   );
 
   useEffect(() => {
-    // when prefix changes, reset and load first page
     setFiles([]);
     setNextToken(undefined);
     nextTokenRef.current = undefined;
@@ -68,3 +67,4 @@ export function useFiles(prefix: string) {
 
   return { files, nextToken, loading, uploading, refresh, loadMore, upload, remove } as const;
 }
+

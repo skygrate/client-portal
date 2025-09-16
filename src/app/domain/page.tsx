@@ -11,7 +11,6 @@ export default function Domain() {
   const { t } = useTranslation();
   const { userId, loading: userLoading, error: userError } = useCurrentUserId();
   const { domains, loading: domainsLoading, error: domainsError, refresh, create, remove } = useDomains(userId);
-  const [selected, setSelected] = useState<string | null>(null);
   const [localError, setLocalError] = useState<string | null>(null);
 
   const error = localError || userError || domainsError;
@@ -38,12 +37,9 @@ export default function Domain() {
       <DomainList
         domains={domains}
         loading={userLoading || domainsLoading}
-        selected={selected}
-        onToggle={(name) => setSelected((cur) => (cur === name ? null : name))}
         onDelete={async (name) => {
           setLocalError(null);
           await remove(name);
-          if (selected === name) setSelected(null);
           await refresh();
         }}
         onError={(msg) => setLocalError(msg)}

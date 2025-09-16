@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { DomainItem } from "../types";
-import { isValidDomain } from "../utils/format";
+import { isValidDomain } from "@shared/utils/format";
 import { useTranslation } from "react-i18next";
 
 type Props = {

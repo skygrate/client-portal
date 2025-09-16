@@ -3,19 +3,18 @@
 import { useState } from "react";
 import type { DomainItem } from "../types";
 import { getPrefix } from "../services/domains";
-import { FilePanel } from "./FilePanel";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 
 type Props = {
   domain: DomainItem;
-  isOpen: boolean;
-  onToggle: () => void;
   onDelete: (name: string) => Promise<void>;
   onError: (message: string) => void;
 };
 
-export function DomainRow({ domain, isOpen, onToggle, onDelete, onError }: Props) {
+export function DomainRow({ domain, onDelete, onError }: Props) {
   const { t } = useTranslation();
+  const router = useRouter();
   const [busy, setBusy] = useState(false);
 
   async function handleDelete() {
@@ -52,12 +51,11 @@ export function DomainRow({ domain, isOpen, onToggle, onDelete, onError }: Props
           <button
             type="button"
             disabled={!canUpload}
-            onClick={onToggle}
+            onClick={() => router.push(`/files?domain=${encodeURIComponent(domain.name)}`)}
             className="rounded-lg px-3 py-1.5 border text-sm hover:bg-gray-50 disabled:opacity-50"
-            aria-pressed={isOpen}
             aria-disabled={!canUpload}
           >
-            {isOpen ? t("reusable.close") : t("domain.manage_files")}
+            {t("domain.manage_files")}
           </button>
 
           <button
@@ -70,9 +68,7 @@ export function DomainRow({ domain, isOpen, onToggle, onDelete, onError }: Props
         </div>
       </div>
 
-      {isOpen && canUpload && (
-        <FilePanel prefix={prefix} onError={onError} />
-      )}
+      {/* File management moved to /files page */}
     </li>
   );
 }

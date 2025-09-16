@@ -13,6 +13,7 @@
     "sidebar": {
         "services_label": "SERWISY", 
         "services_domain_label": "Domeny",
+        "services_files_label": "Pliki",
         "account_label": "KONTO",
         "account_payments_label": "Płatności",
         "account_settings_label": "Ustawienia"
@@ -31,8 +32,8 @@
         "data_saved": "Zapisano dane użytkownika."
     },
     "domain": {
-        "header": "Domeny",
-        "add_domain_label": "Dodaj domenę",
+      "header": "Domeny",
+      "add_domain_label": "Dodaj domenę",
         "add_domain_description": "Dodaj domenę której jesteś właścicielem (np. example.com)",
         "domain_list_label": "Twoje domeny",
         "location": "Lokacja",
@@ -53,7 +54,21 @@
         "confirm_delete_domain": "Usuń “{{domain}}” wraz z plikami? Zmiany nie mona cofnąć.",
         "new_folder_ph": "Nazwa nowego folderu",
         "create_folder": "Utwórz folder",
-        "invalid_folder_name": "Nazwa folderu zawiera niedozwolone znaki."
+      "invalid_folder_name": "Nazwa folderu zawiera niedozwolone znaki."
+    },
+    "files": {
+        "domain_list_label": "Twoje domeny",
+        "no_domains_yet": "Nie masz jeszcze dodanych domen.",
+        "upload_prompt": "Wybierz jeden lub więcej plików do przesłania.",
+        "upload_success": "Przesłano z sukcesem",
+        "upload_error": "Błąd przesyłania",
+        "no_files_yet": "Folder jest pusty",
+        "col_name": "Nazwa",
+        "col_size": "Rozmiar",
+        "col_modified": "Data modyfikacji",
+        "col_actions": "Akcje",
+        "prefix_label": "Prefix",
+        "confirm_delete_file": "Usuń “{{file}}”?"
     },
     "reusable":{
         "add": "Dodaj",

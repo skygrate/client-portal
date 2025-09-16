@@ -7,10 +7,4 @@ export type DomainItem = {
   parameters?: { s3_prefix?: string } | null;
 };
 
-export type FileItem = {
-  path: string;
-  size?: number;
-  lastModified?: string | Date;
-  eTag?: string;
-};
-
+// FileItem moved to files/types.ts
