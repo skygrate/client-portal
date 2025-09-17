@@ -10,7 +10,8 @@ const schema = a.schema({
       userId: a
         .id()
         .required()
-        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read'])]),
+        // Allow owner to set on create, but not update later
+        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create'])]),
       firstName: a.string(),
       lastName: a.string(),
       taxNumber: a.string(),
@@ -27,7 +28,8 @@ const schema = a.schema({
       userId: a
         .id()
         .required()
-        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read'])]),
+        // Allow owner to set on create, but not update later
+        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create'])]),
       name: a.string().required(),
       status: a.string().required(),
       parameters: DomainParameters
@@ -40,7 +42,8 @@ const schema = a.schema({
       userId: a
         .id()
         .required()
-        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read'])]),
+        // Allow owner to set on create, but not update later
+        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create'])]),
       issueDate: a.string().required(),
       net: a.float().required(),
       gross: a.float().required(),
