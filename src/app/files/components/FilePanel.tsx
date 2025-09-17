@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFiles } from "../hooks/useFiles";
-import { formatBytes, formatDate } from "@shared/utils/format";
 import { uploadFile, deleteAllUnderPrefix } from "@shared/services/storage";
+import { FilesToolbar } from "./FilesToolbar";
+import { FilesTable } from "./FilesTable";
+import { UploadArea } from "./UploadArea";
+import { ensureTrailingSlash, getParentPrefix, isValidFolderName, stripPrefix } from "../utils/path";
 
 type Props = {
   prefix: string;
@@ -20,7 +23,6 @@ export function FilePanel({ prefix, onError }: Props) {
   const basePrefix = ensureTrailingSlash(prefix);
   const canGoUp = currentPrefix !== basePrefix;
   const { files, loading, nextToken, refresh, loadMore, upload, remove, uploading } = useFiles(currentPrefix);
-  const fileInputId = "file-upload-input";
   const [deletingFolder, setDeletingFolder] = useState<string | null>(null);
   const directRel = files.map((f) => stripPrefix(f.path, currentPrefix));
   const folderNames = Array.from(
@@ -38,227 +40,82 @@ export function FilePanel({ prefix, onError }: Props) {
 
   return (
     <div className="mt-3 rounded-xl border p-3 bg-gray-50">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-xs text-gray-500">
-          {t("files.prefix_label", "Prefix")}: <code>{displayPrefix(currentPrefix)}</code>
-        </span>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            title={t("files.go_up", "Up one level")}
-            onClick={() => {
-              if (!canGoUp) return;
-              const next = getParentPrefix(currentPrefix, basePrefix);
-              setCurrentPrefix(next);
-            }}
-            className="rounded-lg px-2 py-1.5 border text-sm hover:bg-gray-100 disabled:opacity-50"
-            disabled={!canGoUp || loading || uploading}
-            aria-label={t("files.go_up", "Up one level")}
-          >
-            ←
-          </button>
-          <button
-            type="button"
-            title={t("files.create_folder", "+")}
-            onClick={async () => {
-              const name = prompt(t("files.new_folder_ph", "New folder name"))?.trim();
-              if (!name) return;
-              if (!isValidFolderName(name)) {
-                alert(t("files.invalid_folder_name", "Folder name contains invalid characters."));
-                return;
-              }
-              const clean = name.replaceAll(/\/+$/g, "");
-              const target = ensureTrailingSlash(currentPrefix) + clean + "/";
-              try {
-                // create placeholder to materialize folder without showing it later
-                const placeholder = new File([""], ".keep", { type: "text/plain" });
-                await uploadFile(target, placeholder);
-              } catch (_) {
-                // ignore; S3 doesn't require explicit folders
-              }
-              setCurrentPrefix(target);
-            }}
-            className="rounded-lg px-2 py-1.5 border text-sm hover:bg-gray-100"
-            disabled={loading || uploading}
-            aria-label={t("files.create_folder", "Create folder")}
-          >
-            +
-          </button>
-          <button
-            type="button"
-            onClick={() => refresh().catch((e: unknown) => onError?.(extractErrorMessage(e, "Failed to refresh.")))}
-            disabled={loading}
-            className="rounded-lg px-3 py-1.5 border text-sm hover:bg-gray-100"
-          >
-            {t("reusable.refresh")}
-          </button>
-        </div>
-      </div>
+      <FilesToolbar
+        currentPrefix={currentPrefix}
+        canGoUp={canGoUp}
+        onGoUp={() => {
+          if (!canGoUp) return;
+          setCurrentPrefix(getParentPrefix(currentPrefix, basePrefix));
+        }}
+        onCreateFolder={async () => {
+          const name = prompt(t("files.new_folder_ph", "New folder name"))?.trim();
+          if (!name) return;
+          if (!isValidFolderName(name)) {
+            alert(t("files.invalid_folder_name", "Folder name contains invalid characters."));
+            return;
+          }
+          const clean = name.replaceAll(/\/+$/g, "");
+          const target = ensureTrailingSlash(currentPrefix) + clean + "/";
+          try {
+            const placeholder = new File([""], ".keep", { type: "text/plain" });
+            await uploadFile(target, placeholder);
+          } catch {}
+          setCurrentPrefix(target);
+        }}
+        onRefresh={() => refresh().catch((e: unknown) => onError?.(extractErrorMessage(e, "Failed to refresh.")))}
+        loading={loading}
+        uploading={uploading}
+      />
 
-      <div className="mt-3 overflow-hidden rounded-lg border bg-white">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-gray-600">
-            <tr>
-              <th className="text-left px-3 py-2 w-1/2">{t("files.col_name", "Name")}</th>
-              <th className="text-left px-3 py-2">{t("files.col_size", "Size")}</th>
-              <th className="text-left px-3 py-2">{t("files.col_modified", "Last modified")}</th>
-              <th className="text-right px-3 py-2">{t("files.col_actions", "Actions")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Folder rows */}
-            {folderNames.map((folder) => (
-              <tr key={`dir:${folder}`} className="border-t bg-gray-50/50">
-                <td className="px-3 py-2 font-mono">
-                  <button
-                    type="button"
-                    onClick={() => setCurrentPrefix(ensureTrailingSlash(currentPrefix) + folder + "/")}
-                    className="text-left w-full hover:underline"
-                    title={t("files.open_folder", { defaultValue: "Open folder" })}
-                  >
-                    📁 {folder}/
-                  </button>
-                </td>
-                <td className="px-3 py-2">—</td>
-                <td className="px-3 py-2">—</td>
-                <td className="px-3 py-2 text-right">
-                  <button
-                    type="button"
-                    className="rounded-md px-2 py-1 border hover:bg-gray-50 disabled:opacity-50"
-                    disabled={loading || uploading || deletingFolder === folder}
-                    onClick={async () => {
-                      const ok = confirm(t("files.confirm_delete_folder", { folder }));
-                      if (!ok) return;
-                      const target = ensureTrailingSlash(currentPrefix) + folder + "/";
-                      setDeletingFolder(folder);
-                      try {
-                        await deleteAllUnderPrefix(target);
-                        await refresh();
-                      } catch (err: unknown) {
-                        onError?.(extractErrorMessage(err, "Failed to delete folder."));
-                      } finally {
-                        setDeletingFolder(null);
-                      }
-                    }}
-                  >
-                    {deletingFolder === folder ? t("reusable.deleting") : t("reusable.delete")}
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {/* Empty state */}
-            {folderNames.length === 0 && visibleFiles.length === 0 && (
-              <tr>
-                <td colSpan={4} className="px-3 py-6 text-center text-gray-500">
-                  {loading ? t("reusable.loading") : t("files.no_files_yet")}
-                </td>
-              </tr>
-            )}
-            {visibleFiles.map((f) => (
-              <tr key={f.path} className="border-t">
-                <td className="px-3 py-2 font-mono">
-                  {stripPrefix(f.path, currentPrefix)}
-                </td>
-                <td className="px-3 py-2">{formatBytes(f.size)}</td>
-                <td className="px-3 py-2">{formatDate(f.lastModified)}</td>
-                <td className="px-3 py-2 text-right">
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      const filename = stripPrefix(f.path, currentPrefix);
-                      const ok = confirm(t("files.confirm_delete_file", { file: filename }));
-                      if (!ok) return;
-                      try {
-                        await remove(f);
-                      } catch (err: unknown) {
-                        onError?.(extractErrorMessage(err, "Failed to delete file."));
-                      }
-                    }}
-                    className="rounded-md px-2 py-1 border hover:bg-gray-50"
-                  >
-                    {t("reusable.delete")}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <FilesTable
+        folderNames={folderNames}
+        onOpenFolder={(folder) => setCurrentPrefix(ensureTrailingSlash(currentPrefix) + folder + "/")}
+        deletingFolder={deletingFolder}
+        onDeleteFolder={async (folder) => {
+          const ok = confirm(t("files.confirm_delete_folder", { folder }));
+          if (!ok) return;
+          const target = ensureTrailingSlash(currentPrefix) + folder + "/";
+          setDeletingFolder(folder);
+          try {
+            await deleteAllUnderPrefix(target);
+            await refresh();
+          } catch (err: unknown) {
+            onError?.(extractErrorMessage(err, "Failed to delete folder."));
+          } finally {
+            setDeletingFolder(null);
+          }
+        }}
+        files={visibleFiles}
+        currentPrefix={currentPrefix}
+        onDeleteFile={async (f) => {
+          const filename = stripPrefix(f.path, currentPrefix);
+          const ok = confirm(t("files.confirm_delete_file", { file: filename }));
+          if (!ok) return;
+          try {
+            await remove(f);
+          } catch (err: unknown) {
+            onError?.(extractErrorMessage(err, "Failed to delete file."));
+          }
+        }}
+        loading={loading}
+      />
 
-      {/* Upload area */}
-      <div className="mt-4">
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onDrop={async (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (uploading) return;
-            const dropped = e.dataTransfer.files;
-            if (!dropped || dropped.length === 0) return;
-            try {
-              await upload(dropped);
-              alert(t("files.upload_success"));
-            } catch (err: unknown) {
-              onError?.(extractErrorMessage(err, t("files.upload_error")));
-            }
-          }}
-          className="rounded-lg border-2 border-dashed border-gray-300 bg-white p-4 text-center"
-          aria-label={t("files.upload_prompt")}
-       >
-          <p className="text-sm text-gray-700 mb-3">{t("files.upload_prompt")}</p>
-          <div className="flex items-center justify-center gap-2">
-            <button
-              type="button"
-              onClick={() => document.getElementById(fileInputId)?.click()}
-              className="rounded-md px-3 py-2 border bg-black text-white text-sm disabled:opacity-50"
-              disabled={uploading}
-            >
-              {uploading ? t("reusable.uploading") : t("reusable.upload")}
-            </button>
-            {nextToken && (
-              <button
-                type="button"
-                onClick={() => loadMore().catch((e) => onError?.(extractErrorMessage(e, "Failed to load more.")))}
-                className="rounded-md px-3 py-2 border text-sm hover:bg-gray-50 disabled:opacity-50"
-                disabled={loading}
-              >
-                {loading ? t("reusable.loading") : t("reusable.load_more")}
-              </button>
-            )}
-          </div>
-          <input
-            id={fileInputId}
-            type="file"
-            className="sr-only"
-            multiple
-            onChange={async (e) => {
-              const input = e.currentTarget;
-              const picked = input.files;
-              if (picked && picked.length > 0) {
-                try {
-                  await upload(picked);
-                  alert(t("files.upload_success"));
-                } catch (err: unknown) {
-                  const msg = extractErrorMessage(err, t("files.upload_error"));
-                  onError?.(msg);
-                } finally {
-                  input.value = "";
-                }
-              }
-            }}
-            disabled={uploading}
-          />
-        </div>
-      </div>
+      <UploadArea
+        uploading={uploading}
+        nextToken={nextToken}
+        loading={loading}
+        onPickFiles={async (picked) => {
+          try {
+            await upload(picked);
+            alert(t("files.upload_success"));
+          } catch (err: unknown) {
+            onError?.(extractErrorMessage(err, t("files.upload_error")));
+          }
+        }}
+        onLoadMore={() => loadMore().catch((e) => onError?.(extractErrorMessage(e, "Failed to load more.")))}
+      />
     </div>
   );
-}
-
-function stripPrefix(path: string, prefix: string) {
-  return path.startsWith(prefix) ? path.slice(prefix.length) : path;
 }
 
 function extractErrorMessage(err: unknown, fallback: string) {

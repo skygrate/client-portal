@@ -20,7 +20,6 @@ export function SettingsForm({ profile, setProfile, loading, onSave }: Props) {
 
   return (
     <div className="grid grid-cols-[12rem,1fr] gap-x-4 gap-y-3 max-w-xl">
-      <h2 className="col-span-2 text-xl text-right font-bold mt-6 mb-2">{t('settings.header')}</h2>
 
       <label htmlFor="fname" className="text-right self-center">{t('settings.first_name')}</label>
       <input

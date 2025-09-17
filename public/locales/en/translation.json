@@ -18,7 +18,16 @@
         "account_payments_label": "Payments",
         "account_settings_label": "Settings"
     },
-    "payment": {},
+    "payment": {
+        "header": "Invoices",
+        "no_invoices": "No invoices yet",
+        "open_invoice": "Open invoice",
+        "col_date": "Issue date",
+        "col_net": "Net",
+        "col_vat_rate": "VAT %",
+        "col_gross": "Gross",
+        "col_actions": "Actions"
+    },
     "settings": {
         "header": "User data",
         "first_name": "First name",

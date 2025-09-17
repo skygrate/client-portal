@@ -18,7 +18,16 @@
         "account_payments_label": "Płatności",
         "account_settings_label": "Ustawienia"
     },
-    "payment": {},
+    "payment": {
+        "header": "Faktury",
+        "no_invoices": "Brak faktur",
+        "open_invoice": "Otwórz fakturę",
+        "col_date": "Data wystawienia",
+        "col_net": "Netto",
+        "col_vat_rate": "VAT %",
+        "col_gross": "Brutto",
+        "col_actions": "Akcje"
+    },
     "settings": {
         "header": "Dane użytkownika",
         "first_name": "Imię",
