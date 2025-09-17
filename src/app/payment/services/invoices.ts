@@ -1,11 +1,12 @@
 "use client";
 
 import { amplifyClient } from "@shared/services/amplifyClient";
-import type { Schema } from "../../../../amplify/data/resource";
 import { getUrl } from "aws-amplify/storage";
 import { fetchAuthSession } from "aws-amplify/auth";
 
-const client = amplifyClient as unknown as ReturnType<typeof amplifyClient> & { models: Schema["models"] };
+type InvoiceModelApi = { list: (args: unknown) => Promise<{ data?: unknown }> };
+type DataClient = { models?: { Invoice?: InvoiceModelApi } };
+const dataClient = amplifyClient as unknown as DataClient;
 
 export type InvoiceItem = {
   userId: string;
@@ -17,10 +18,8 @@ export type InvoiceItem = {
   currency?: string; // e.g., PLN, EUR
 };
 
-type InvoiceModelApi = { list: (args: unknown) => Promise<{ data?: unknown }> };
-
 export async function listInvoicesByUser(userId: string): Promise<InvoiceItem[]> {
-  const maybeModels = (client as unknown as { models?: { Invoice?: InvoiceModelApi } }).models;
+  const maybeModels = dataClient.models;
   const invoiceModel = maybeModels?.Invoice;
   if (!invoiceModel || typeof invoiceModel.list !== 'function') {
     // Model not available locally (likely amplify_outputs/model_introspection not updated yet)
