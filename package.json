@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deps:refresh": "rm -rf node_modules package-lock.json && npm install && npm dedupe"
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.6.7",
