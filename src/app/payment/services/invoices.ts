@@ -17,8 +17,11 @@ export type InvoiceItem = {
   currency?: string; // e.g., PLN, EUR
 };
 
+type InvoiceModelApi = { list: (args: unknown) => Promise<{ data?: unknown }> };
+
 export async function listInvoicesByUser(userId: string): Promise<InvoiceItem[]> {
-  const invoiceModel: any = (client as any)?.models?.Invoice;
+  const maybeModels = (client as unknown as { models?: { Invoice?: InvoiceModelApi } }).models;
+  const invoiceModel = maybeModels?.Invoice;
   if (!invoiceModel || typeof invoiceModel.list !== 'function') {
     // Model not available locally (likely amplify_outputs/model_introspection not updated yet)
     console.warn('[Invoices] Invoice model not available. Is the backend deployed and amplify_outputs.json updated?');
@@ -47,17 +50,17 @@ export async function getInvoiceUrl(userId: string, fileName: string): Promise<s
   const bucket = 'billing';
   // Preferred: invoices/{identity_id}/file
   const session = await fetchAuthSession();
-  const identityId = (session as any)?.identityId as string | undefined;
+  const identityId = (session as { identityId?: string } | undefined)?.identityId;
   if (identityId) {
     try {
       const keyId = `invoices/${identityId}/${fileName}`;
-      const { url } = await getUrl({ path: keyId, options: { bucket, validateObjectExistence: true } as any });
+      const { url } = await getUrl({ path: keyId, options: { bucket, validateObjectExistence: true } });
       return url.toString();
     } catch {/* fallthrough to sub */}
   }
   // Fallback: invoices/{sub}/file (if you store by sub)
   const keySub = `invoices/${userId}/${fileName}`;
-  const { url } = await getUrl({ path: keySub, options: { bucket, validateObjectExistence: true } as any });
+  const { url } = await getUrl({ path: keySub, options: { bucket, validateObjectExistence: true } });
   return url.toString();
 }
 

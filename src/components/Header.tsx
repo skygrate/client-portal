@@ -2,6 +2,7 @@
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 const languages = [
   { code: 'en', label: 'English', flag: '/flags/en.png' },
@@ -36,7 +37,7 @@ export default function Header() {
           {/* Language Selector */}
           <div className="relative" ref={dropdownRef}>
             <button onClick={() => setOpen(o => !o)} className="flex items-center gap-1 border rounded px-2 py-1 hover:bg-gray-100">
-              <img src={currentLang.flag} alt={currentLang.label} className="w-5 h-4 object-cover" />
+              <Image src={currentLang.flag} alt={currentLang.label} width={20} height={16} className="object-cover w-5 h-4" />
               <span className="text-sm">{currentLang.code.toUpperCase()}</span>
             </button>
             {open && (
@@ -47,7 +48,7 @@ export default function Header() {
                     onClick={() => { i18n.changeLanguage(lang.code); setOpen(false); }}
                     className={`w-full flex items-center gap-2 px-2 py-1 text-sm hover:bg-gray-100 ${i18n.language === lang.code ? 'font-semibold' : ''}`}
                   >
-                    <img src={lang.flag} alt={lang.label} className="w-5 h-4 object-cover" />
+                    <Image src={lang.flag} alt={lang.label} width={20} height={16} className="object-cover w-5 h-4" />
                     {lang.label}
                   </button>
                 ))}

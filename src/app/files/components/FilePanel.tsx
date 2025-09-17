@@ -126,28 +126,3 @@ function extractErrorMessage(err: unknown, fallback: string) {
   }
   return fallback;
 }
-
-function ensureTrailingSlash(p: string) {
-  return p.endsWith("/") ? p : `${p}/`;
-}
-
-function isValidFolderName(name: string) {
-  // allow letters, numbers, dash, underscore, dot; no slashes or spaces
-  return /^[A-Za-z0-9._-]+$/.test(name) && name !== "." && name !== "..";
-}
-
-function displayPrefix(p: string) {
-  return p.replace(/^public\/sites\//, "");
-}
-
-function getParentPrefix(current: string, base: string) {
-  // Remove the last segment (ending with a trailing slash)
-  const withoutTrailing = current.replace(/\/+$/, "");
-  const parent = withoutTrailing.replace(/[^/]+$/, "");
-  const normalized = ensureTrailingSlash(parent);
-  // Never go above the domain root
-  if (!normalized.startsWith(base) || normalized.length < base.length) {
-    return base;
-  }
-  return normalized;
-}
