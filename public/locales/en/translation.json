@@ -68,7 +68,12 @@
         "col_modified": "Last modified",
         "col_actions": "Actions",
         "prefix_label": "Prefix",
-        "confirm_delete_file": "Delete “{{file}}”?"
+        "confirm_delete_file": "Delete “{{file}}”?",
+        "new_folder_ph": "New folder name",
+        "invalid_folder_name": "Folder name contains invalid characters.",
+        "create_folder": "Create folder",
+        "go_up": "Up one level",
+        "confirm_delete_folder": "Delete folder “{{folder}}” and all its contents?"
     },
     "reusable":{
         "add": "Add",
