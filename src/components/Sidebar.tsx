@@ -9,7 +9,7 @@ const servicesMenuItems = [
 ]
 const accountMenuItems = [
   { href: '/settings', labelKey: 'sidebar.account_settings_label' },
-  { href: '/payment',  labelKey: 'sidebar.account_payments_label' },
+  { href: '/invoices',  labelKey: 'sidebar.account_payments_label' },
 ];
 
 export default function Sidebar() {

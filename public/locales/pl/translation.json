@@ -15,10 +15,10 @@
         "services_domain_label": "Domeny",
         "services_files_label": "Pliki",
         "account_label": "KONTO",
-        "account_payments_label": "Płatności",
+        "account_payments_label": "Faktury",
         "account_settings_label": "Ustawienia"
     },
-    "payment": {
+    "invoices": {
         "header": "Faktury",
         "no_invoices": "Brak faktur",
         "open_invoice": "Otwórz fakturę",

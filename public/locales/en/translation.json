@@ -15,10 +15,10 @@
         "services_domain_label": "Domains",
         "services_files_label": "Files",
         "account_label": "ACCOUNT",
-        "account_payments_label": "Payments",
+        "account_payments_label": "Invoices",
         "account_settings_label": "Settings"
     },
-    "payment": {
+    "invoices": {
         "header": "Invoices",
         "no_invoices": "No invoices yet",
         "open_invoice": "Open invoice",
