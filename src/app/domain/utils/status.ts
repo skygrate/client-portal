@@ -8,4 +8,3 @@ export function computeStatus(d: DomainItem): DomainStatus {
   const infra = !!d.infraReady;
   return infra ? "Ready" : "New";
 }
-

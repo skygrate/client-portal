@@ -28,7 +28,7 @@ export async function createDomain(userId: string, name: string): Promise<void> 
     status: "New",
     s3_prefix: `public/sites/${userId}/${name}/`,
     infraReady: false,
-  } as any);
+  });
 }
 
 export async function deleteDomain(userId: string, name: string): Promise<void> {
