@@ -5,6 +5,7 @@ import type { DomainItem } from "../types";
 import { getPrefix } from "../services/domains";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
+import { computeStatus } from "../utils/status";
 
 type Props = {
   domain: DomainItem;
@@ -38,13 +39,31 @@ export function DomainRow({ domain, onDelete, onError }: Props) {
   const prefix = getPrefix(domain);
   const canUpload = Boolean(prefix);
 
+  const href = domain.url || `https://${domain.name}`;
+  const computed = computeStatus(domain);
+  const isOnline = computed === 'Online';
+
   return (
     <li className="py-3">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <div className="font-medium">{domain.name}</div>
+          <div className="font-medium">
+            {isOnline ? (
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                {domain.name}
+              </a>
+            ) : (
+              <span>{domain.name}</span>
+            )}
+          </div>
           <div className="text-sm text-gray-600">
-            {t("domain.status_label", "Status")}: {domain.status}
+            {t("domain.status_label", "Status")}: {" "}
+            <span className={isOnline ? 'text-green-600 font-semibold' : undefined}>{computed}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">

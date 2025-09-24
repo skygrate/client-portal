@@ -6,16 +6,29 @@ const client = amplifyClient;
 
 export async function listByUser(userId: string): Promise<DomainItem[]> {
   const res = await client.models.Domain.list({ filter: { userId: { eq: userId } } });
-  return (res.data as unknown as DomainItem[]) ?? [];
+  const raw = (res.data as unknown as Array<Record<string, unknown> | null | undefined>) ?? [];
+  const items: DomainItem[] = raw
+    .filter((x): x is Record<string, unknown> => Boolean(x))
+    .filter((x) => typeof x.userId === 'string' && typeof x.name === 'string')
+    .map((x) => ({
+      userId: x.userId as string,
+      name: x.name as string,
+      status: String(x.status ?? ''),
+      s3_prefix: (x.s3_prefix as string) || `public/sites/${userId}/${String(x.name)}/`,
+      infraReady: Boolean(x.infraReady),
+      url: typeof x.url === 'string' ? (x.url as string) : `https://${String(x.name)}`,
+    }));
+  return items;
 }
 
 export async function createDomain(userId: string, name: string): Promise<void> {
   await client.models.Domain.create({
     userId,
     name,
-    status: "Ready",
-    parameters: { s3_prefix: `public/sites/${name}/` },
-  });
+    status: "New",
+    s3_prefix: `public/sites/${userId}/${name}/`,
+    infraReady: false,
+  } as any);
 }
 
 export async function deleteDomain(userId: string, name: string): Promise<void> {
@@ -23,5 +36,8 @@ export async function deleteDomain(userId: string, name: string): Promise<void> 
 }
 
 export function getPrefix(domain: DomainItem): string {
-  return domain.parameters?.s3_prefix ?? `public/sites/${domain.name}/`;
+  return (
+    domain.s3_prefix ||
+    `public/sites/${domain.userId}/${domain.name}/`
+  );
 }

@@ -18,7 +18,7 @@ export function FilesToolbar({ currentPrefix, canGoUp, onGoUp, onCreateFolder, o
   return (
     <div className="flex items-center justify-between gap-2">
       <span className="text-xs text-gray-500">
-        {t("files.prefix_label", "Prefix")}: <code>{displayPrefix(currentPrefix)}</code>
+        <code>{displayPrefix(currentPrefix)}</code>
       </span>
       <div className="flex items-center gap-2">
         <button
@@ -53,4 +53,3 @@ export function FilesToolbar({ currentPrefix, canGoUp, onGoUp, onCreateFolder, o
     </div>
   );
 }
-

@@ -41,7 +41,7 @@ export function useDomains(userId: string | null) {
     async (name: string) => {
       if (!userId) return;
       const d = domains.find((x) => x.name === name);
-      const prefix = d ? getPrefix(d) : `public/sites/${name}/`;
+      const prefix = d ? getPrefix(d) : `public/sites/${userId}/${name}/`;
       await deleteAllUnderPrefix(prefix);
       await deleteDomain(userId, name);
     },

@@ -14,7 +14,8 @@ export function isValidFolderName(name: string) {
 }
 
 export function displayPrefix(p: string) {
-  return p.replace(/^public\/sites\//, "");
+  // Hide internal prefix up to and including userId (public/sites/{userId}/)
+  return p.replace(/^public\/sites\/[^/]+\//, "");
 }
 
 export function getParentPrefix(current: string, base: string) {
@@ -26,4 +27,3 @@ export function getParentPrefix(current: string, base: string) {
   }
   return normalized;
 }
-

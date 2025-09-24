@@ -1,9 +1,5 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-const DomainParameters = a.customType({
-  s3_prefix: a.string().required(),
-});
-
 const schema = a.schema({
   UserProfile: a
     .model({
@@ -29,13 +25,17 @@ const schema = a.schema({
         .id()
         .required()
         // Allow owner to set on create, but not update later
-        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create'])]),
+        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create','delete'])]),
       name: a.string().required(),
-      status: a.string().required(),
-      parameters: DomainParameters
+      status: a.string().required(), //'New', 'Ready', 'Online', 'Error'
+      s3_prefix: a.string().required(),
+      infraReady: a.boolean().required(),
+      url: a.string()
     })
     .identifier(["userId", "name"])
-    .authorization(allow => [allow.ownerDefinedIn('userId').identityClaim('sub')])
+    .authorization(allow => [
+      allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create','update','delete'])
+    ])
   ,
   Invoice: a
     .model({
