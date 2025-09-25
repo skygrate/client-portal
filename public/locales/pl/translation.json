@@ -11,9 +11,10 @@
         "logout": "Wyloguj"
     },
     "sidebar": {
-        "services_label": "SERWISY", 
+        "services_label": "SERWISY",
         "services_domain_label": "Domeny",
         "services_files_label": "Pliki",
+        "services_applications_label": "Aplikacje",
         "account_label": "KONTO",
         "account_payments_label": "Faktury",
         "account_settings_label": "Ustawienia"
@@ -41,8 +42,8 @@
         "data_saved": "Zapisano dane użytkownika."
     },
     "domain": {
-      "header": "Domeny",
-      "add_domain_label": "Dodaj domenę",
+        "header": "Domeny",
+        "add_domain_label": "Dodaj domenę",
         "add_domain_description": "Dodaj domenę której jesteś właścicielem (np. example.com)",
         "domain_list_label": "Twoje domeny",
         "location": "Lokacja",
@@ -50,7 +51,9 @@
         "upload_prompt": "Wybierz jeden lub więcej plików do przesłania.",
         "upload_success": "Przesłano z sukcesem",
         "upload_error": "Błąd przesyłania",
-        "manage_files": "Zarządzaj plikami",
+        "manage_files": "Pliki",
+        "manage_applications": "Aplikacje",
+        "confirm_soft_delete_domain": "Oznaczyć domenę „{{domain}}” do usunięcia?",
         "status_label": "Status",
         "invalid_domain_hint": "To nie wyglada na prawidłowa nazwę domeny.",
         "no_files_yet": "Folder jest pusty",
@@ -60,10 +63,10 @@
         "col_actions": "Akcje",
         "prefix_label": "Prefix",
         "confirm_delete_file": "Usuń “{{file}}”?",
-        "confirm_delete_domain": "Usuń “{{domain}}” wraz z plikami? Zmiany nie mona cofnąć.",
+        "confirm_delete_domain": "Usuń “{{domain}}” wraz z aplikacjami oraz plikami? Zmiany nie mona cofnąć.",
         "new_folder_ph": "Nazwa nowego folderu",
         "create_folder": "Utwórz folder",
-      "invalid_folder_name": "Nazwa folderu zawiera niedozwolone znaki."
+        "invalid_folder_name": "Nazwa folderu zawiera niedozwolone znaki."
     },
     "files": {
         "domain_list_label": "Twoje domeny",
@@ -82,14 +85,21 @@
         "invalid_folder_name": "Nazwa folderu zawiera niedozwolone znaki.",
         "create_folder": "Utwórz folder",
         "go_up": "Poziom wyżej",
-        "confirm_delete_folder": "Usunąć folder “{{folder}}” wraz z jego zawartością?"
+        "confirm_delete_folder": "Usunąć folder “{{folder}}” wraz z jego zawartością?",
+        "select_domain_placeholder": "Wybierz domenę",
+        "domain_status_pending": "Konfiguracja",
+        "domain_not_ready_hint": "Konfiguracja domeny {{domain}} nadal trwa.",
+        "no_ready_domains": "Żadna z domen nie jest jeszcze gotowa. Zarządzanie plikami będzie możliwe po zakończeniu konfiguracji."
     },
-    "reusable":{
+    "reusable": {
         "add": "Dodaj",
         "adding": "Dodaję...",
+        "cancel": "Anuluj",
+        "cancel_deletion": "Anuluj usuwanie",
         "close": "Zamknij",
         "delete": "Usuń",
         "deleting": "Usuwam...",
+        "hard_delete": "Usuń trwale",
         "loading": "Ładuję...",
         "load_more": "Załaduj więcej",
         "upload": "Prześlij",
@@ -97,5 +107,30 @@
         "refresh": "Odśwież",
         "save": "Zapisz",
         "saved": "Zapisano"
+    },
+    "applications": {
+        "col_name": "Nazwa",
+        "col_type": "Typ",
+        "col_actions": "Akcje",
+        "confirm_delete": "Usunąć aplikację „{{app}}” na domenie {{domain}}?\n\nOstrzeżenie: spowoduje to trwałe usunięcie aplikacji i wszystkich jej danych.",
+        "confirm_soft_delete": "Oznaczyć aplikację „{{app}}” na domenie {{domain}} do usunięcia?",
+        "error_duplicate_url": "Aplikacja z adresem URL {{fqdn}} już istnieje.",
+        "error_domain_not_ready": "Domena {{domain}} nie jest jeszcze gotowa. Poczekaj na zakończenie konfiguracji.",
+        "domain_not_ready_hint": "Konfiguracja domeny {{domain}} nadal trwa.",
+        "no_ready_domains": "Żadna z domen nie jest jeszcze gotowa. Możliwość dodania aplikacji pojawi się po zakończeniu konfiguracji.",
+        "no_domains_available": "Dodaj domenę, aby móc tworzyć aplikacje.",
+        "select_domain_placeholder": "Wybierz domenę",
+        "domain_status_pending": "Konfiguracja"
+    },
+    "application_types": {
+        "static_www": "Statyczna www",
+        "static_www_description": "Serwowanie statycznych plików HTML",
+        "wordpress": "WordPress",
+        "wordpress_description": "Przygotowanie instancji WordPress"
+    },
+    "application_create_form": {
+        "domain_label": "Domena",
+        "application_name_label": "Nazwa aplikacji",
+        "subdomain_label": "Subdomena"
     }
 }

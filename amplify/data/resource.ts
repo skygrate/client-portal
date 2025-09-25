@@ -27,10 +27,10 @@ const schema = a.schema({
         // Allow owner to set on create, but not update later
         .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create','delete'])]),
       name: a.string().required(),
-      status: a.string().required(), //'New', 'Ready', 'Online', 'Error'
       s3_prefix: a.string().required(),
       infraReady: a.boolean().required(),
-      url: a.string()
+      url: a.string(),
+      toBeDeleted: a.boolean().required().default(false)
     })
     .identifier(["userId", "name"])
     .authorization(allow => [
@@ -53,6 +53,24 @@ const schema = a.schema({
     })
     .identifier(["userId", "issueDate"]) // sort by issueDate within user
     .authorization(allow => [allow.ownerDefinedIn('userId').identityClaim('sub')])
+  ,
+  // Applications attached to domains (e.g., STATIC site or WORDPRESS instance)
+  Application: a
+    .model({
+      userId: a.id().required()
+        .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create','update','delete'])]),
+      domain: a.string().required(),
+      appName: a.string().required(), // logical name or subdomain label (e.g., "www", "app1")
+      // store as string for now; allowed values: STATIC | WORDPRESS
+      type: a.string().required(),
+      fqdn: a.string().required(),
+      infraReady: a.boolean().required(),
+      s3Prefix: a.string(), // for STATIC or uploads path for WORDPRESS if desired
+      subdomain: a.string(),
+      toBeDeleted: a.boolean().required().default(false),
+    })
+    .identifier(['userId','domain','appName'])
+    .authorization((allow) => [allow.ownerDefinedIn('userId').identityClaim('sub').to(['read','create','update','delete'])])
 });
 
 export type Schema = ClientSchema<typeof schema>

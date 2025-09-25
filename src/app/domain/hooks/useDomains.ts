@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { DomainItem } from "../types";
-import { createDomain, deleteDomain, getPrefix, listByUser } from "../services/domains";
+import { createDomain, deleteDomain, getPrefix, listByUser, markDomainForDeletion, unmarkDomainForDeletion } from "../services/domains";
 import { deleteAllUnderPrefix } from "@shared/services/storage";
 
 export function useDomains(userId: string | null) {
@@ -37,6 +37,22 @@ export function useDomains(userId: string | null) {
     [userId]
   );
 
+  const markForDeletion = useCallback(
+    async (name: string) => {
+      if (!userId) return;
+      await markDomainForDeletion(userId, name);
+    },
+    [userId]
+  );
+
+  const cancelDeletion = useCallback(
+    async (name: string) => {
+      if (!userId) return;
+      await unmarkDomainForDeletion(userId, name);
+    },
+    [userId]
+  );
+
   const remove = useCallback(
     async (name: string) => {
       if (!userId) return;
@@ -48,5 +64,5 @@ export function useDomains(userId: string | null) {
     [domains, userId]
   );
 
-  return { domains, loading, error, refresh, create, remove } as const;
+  return { domains, loading, error, refresh, create, remove, markForDeletion, cancelDeletion } as const;
 }

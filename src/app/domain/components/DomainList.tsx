@@ -8,10 +8,12 @@ type Props = {
   domains: DomainItem[];
   loading: boolean;
   onDelete: (name: string) => Promise<void>;
+  onSoftDelete: (name: string) => Promise<void>;
+  onCancelSoftDelete: (name: string) => Promise<void>;
   onError: (message: string) => void;
 };
 
-export function DomainList({ domains, loading, onDelete, onError }: Props) {
+export function DomainList({ domains, loading, onDelete, onSoftDelete, onCancelSoftDelete, onError }: Props) {
   const { t } = useTranslation();
   return (
     <div className="rounded-2xl border p-4 shadow-sm bg-white">
@@ -28,6 +30,8 @@ export function DomainList({ domains, loading, onDelete, onError }: Props) {
               key={`${d.userId}:${d.name}`}
               domain={d}
               onDelete={onDelete}
+              onSoftDelete={onSoftDelete}
+              onCancelSoftDelete={onCancelSoftDelete}
               onError={onError}
             />
           ))}

@@ -11,9 +11,10 @@
         "logout": "Log Out"
     },
     "sidebar": {
-        "services_label": "SERVICES", 
+        "services_label": "SERVICES",
         "services_domain_label": "Domains",
         "services_files_label": "Files",
+        "services_applications_label": "Applications",
         "account_label": "ACCOUNT",
         "account_payments_label": "Invoices",
         "account_settings_label": "Settings"
@@ -41,8 +42,8 @@
         "data_saved": "User settings saved."
     },
     "domain": {
-      "header": "Domains",
-      "add_domain_label": "Add a domain",
+        "header": "Domains",
+        "add_domain_label": "Add a domain",
         "add_domain_description": "Enter a domain you own (e.g., example.com).",
         "domain_list_label": "Your domains",
         "location": "Location",
@@ -50,7 +51,9 @@
         "upload_prompt": "Choose files to upload to this site.",
         "upload_success": "Uploaded succesfully",
         "upload_error": "Upload failed",
-        "manage_files": "Manage files",
+        "manage_files": "Files",
+        "manage_applications": "Applications",
+        "confirm_soft_delete_domain": "Mark domain \"{{domain}}\" for deletion?",
         "status_label": "Status",
         "invalid_domain_hint": "That doesn’t look like a valid domain.",
         "no_files_yet": "This folder is empty",
@@ -60,10 +63,10 @@
         "col_actions": "Actions",
         "prefix_label": "Prefix",
         "confirm_delete_file": "Delete “{{file}}”?",
-        "confirm_delete_domain": "Delete domain “{{domain}}” and all its files? This cannot be undone.",
+        "confirm_delete_domain": "Delete domain “{{domain}}” and all its applications and files? This cannot be undone.",
         "new_folder_ph": "New folder name",
         "create_folder": "Create folder",
-      "invalid_folder_name": "Folder name contains invalid characters."
+        "invalid_folder_name": "Folder name contains invalid characters."
     },
     "files": {
         "domain_list_label": "Your domains",
@@ -82,14 +85,21 @@
         "invalid_folder_name": "Folder name contains invalid characters.",
         "create_folder": "Create folder",
         "go_up": "Up one level",
-        "confirm_delete_folder": "Delete folder “{{folder}}” and all its contents?"
+        "confirm_delete_folder": "Delete folder “{{folder}}” and all its contents?",
+        "select_domain_placeholder": "Select domain",
+        "domain_status_pending": "Provisioning",
+        "domain_not_ready_hint": "Provisioning for {{domain}} is still in progress.",
+        "no_ready_domains": "None of your domains are ready yet. You’ll be able to manage files once provisioning finishes."
     },
-    "reusable":{
+    "reusable": {
         "add": "Add",
         "adding": "Adding...",
+        "cancel": "Anuluj",
+        "cancel_deletion": "Cancel deletion",
         "close": "Close",
         "delete": "Delete",
         "deleting": "Deleting…",
+        "hard_delete": "Hard delete",
         "loading": "Loding...",
         "load_more": "Load more",
         "upload": "Upload",
@@ -97,5 +107,30 @@
         "refresh": "Refresh",
         "save": "Save",
         "saved": "Saved"
+    },
+    "applications": {
+        "col_name": "Name",
+        "col_type": "Type",
+        "col_actions": "Actions",
+        "confirm_delete": "Delete application \"{{app}}\" on {{domain}}?\n\nWarning: This will permanently delete the application and all its data.",
+        "confirm_soft_delete": "Mark application \"{{app}}\" on {{domain}} for deletion?",
+        "error_duplicate_url": "An application with URL {{fqdn}} already exists.",
+        "error_domain_not_ready": "Domain {{domain}} isn’t ready yet. Wait for provisioning to complete before adding applications.",
+        "domain_not_ready_hint": "Provisioning for {{domain}} is still in progress.",
+        "no_ready_domains": "None of your domains are ready yet. You’ll be able to add applications once provisioning finishes.",
+        "no_domains_available": "Add a domain first to create applications.",
+        "select_domain_placeholder": "Select domain",
+        "domain_status_pending": "Provisioning"
+    },
+    "application_types": {
+        "static_www": "Static www",
+        "static_www_description": "Serve static content from html files",
+        "wordpress": "WordPress",
+        "wordpress_description": "Provision a WordPress instance"
+    },
+    "application_create_form": {
+        "domain_label": "Domain",
+        "application_name_label": "Application name",
+        "subdomain_label": "Subdomain (optional)"
     }
 }

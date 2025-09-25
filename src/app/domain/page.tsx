@@ -10,7 +10,7 @@ import { useDomains } from "./hooks/useDomains";
 export default function Domain() {
   const { t } = useTranslation();
   const { userId, loading: userLoading, error: userError } = useCurrentUserId();
-  const { domains, loading: domainsLoading, error: domainsError, refresh, create, remove } = useDomains(userId);
+  const { domains, loading: domainsLoading, error: domainsError, refresh, create, remove, markForDeletion, cancelDeletion } = useDomains(userId);
   const [localError, setLocalError] = useState<string | null>(null);
 
   const error = localError || userError || domainsError;
@@ -40,6 +40,16 @@ export default function Domain() {
         onDelete={async (name) => {
           setLocalError(null);
           await remove(name);
+          await refresh();
+        }}
+        onSoftDelete={async (name) => {
+          setLocalError(null);
+          await markForDeletion(name);
+          await refresh();
+        }}
+        onCancelSoftDelete={async (name) => {
+          setLocalError(null);
+          await cancelDeletion(name);
           await refresh();
         }}
         onError={(msg) => setLocalError(msg)}
