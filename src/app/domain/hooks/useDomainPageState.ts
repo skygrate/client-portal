@@ -23,7 +23,9 @@ export function useDomainPageState(userId: string | null): DomainPageState {
   const { error: localError, reportError: reportErrorRaw, clearError } = useErrorState();
 
   const reportError = useCallback(
-    (input: ReportErrorInput) => reportErrorRaw(input),
+    (input: ReportErrorInput) => {
+      reportErrorRaw(input);
+    },
     [reportErrorRaw]
   );
 

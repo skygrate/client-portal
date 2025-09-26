@@ -6,6 +6,7 @@ import type { DomainItem } from "@domain";
 import type { ApplicationItem, AppType } from "@applications";
 import { listApplicationsByUser, createApplicationRecord } from "@data/applications";
 import { useErrorState } from "@shared/hooks/useErrorState";
+import type { ReportErrorInput } from "@shared/hooks/useErrorState";
 
 export type UseApplicationsManagerArgs = {
   userId: string | null;
@@ -19,7 +20,7 @@ export type UseApplicationsManagerResult = {
   creating: AppType | null;
   startCreating: (type: AppType) => void;
   cancelCreating: () => void;
-  reportError: (message: string) => void;
+  reportError: (input: ReportErrorInput) => void;
   clearError: () => void;
   refresh: () => Promise<void>;
   handleCreate: (payload: { domain: string; appName: string; type: AppType; subdomain?: string }) => Promise<void>;
@@ -29,7 +30,10 @@ export function useApplicationsManager({ userId, domains }: UseApplicationsManag
   const { t } = useTranslation();
   const [items, setItems] = useState<ApplicationItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const { error, reportError, clearError } = useErrorState();
+  const { error, reportError: reportErrorRaw, clearError } = useErrorState();
+  const reportError = useCallback((input: ReportErrorInput) => {
+    reportErrorRaw(input);
+  }, [reportErrorRaw]);
   const [creating, setCreating] = useState<AppType | null>(null);
 
   const refresh = useCallback(async () => {
