@@ -6,19 +6,19 @@ describe("data layer configuration", () => {
   });
 
   it("domains helpers throw if unconfigured", async () => {
-    const module = await import("../domains");
-    await expect(module.listDomainsByUser("u1")).rejects.toThrow(/Domain data source not configured/);
+    const domainModule = await import("../domains");
+    await expect(domainModule.listDomainsByUser("u1")).rejects.toThrow(/Domain data source not configured/);
   });
 
   it("domains helpers delegate to configured source", async () => {
-    const module = await import("../domains");
+    const domainModule = await import("../domains");
     const listByUser = vi.fn().mockResolvedValue([{ userId: "u1", name: "example.com", s3_prefix: "p/" }]);
     const create = vi.fn();
     const mark = vi.fn();
     const cancel = vi.fn();
     const remove = vi.fn();
 
-    module.configureDomainDataSource({
+    domainModule.configureDomainDataSource({
       listByUser,
       create,
       markForDeletion: mark,
@@ -26,11 +26,11 @@ describe("data layer configuration", () => {
       delete: remove,
     });
 
-    expect(await module.listDomainsByUser("u1")).toHaveLength(1);
-    await module.createDomainRecord("u1", "example.com");
-    await module.markDomainForDeletion("u1", "example.com");
-    await module.cancelDomainDeletion("u1", "example.com");
-    await module.deleteDomainRecord("u1", "example.com");
+    expect(await domainModule.listDomainsByUser("u1")).toHaveLength(1);
+    await domainModule.createDomainRecord("u1", "example.com");
+    await domainModule.markDomainForDeletion("u1", "example.com");
+    await domainModule.cancelDomainDeletion("u1", "example.com");
+    await domainModule.deleteDomainRecord("u1", "example.com");
 
     expect(listByUser).toHaveBeenCalledWith("u1");
     expect(create).toHaveBeenCalledWith("u1", "example.com");
@@ -40,14 +40,14 @@ describe("data layer configuration", () => {
   });
 
   it("applications helpers delegate once configured", async () => {
-    const module = await import("../applications");
+    const applicationsModule = await import("../applications");
     const list = vi.fn().mockResolvedValue([]);
     const del = vi.fn();
     const mark = vi.fn();
     const cancel = vi.fn();
     const create = vi.fn();
 
-    module.configureApplicationsDataSource({
+    applicationsModule.configureApplicationsDataSource({
       listByUser: list,
       delete: del,
       markForDeletion: mark,
@@ -55,11 +55,11 @@ describe("data layer configuration", () => {
       create,
     });
 
-    await module.listApplicationsByUser("user");
-    await module.deleteApplicationRecord({ userId: "user", domain: "d", appName: "app" });
-    await module.markApplicationForDeletion({ userId: "user", domain: "d", appName: "app" });
-    await module.cancelApplicationDeletion({ userId: "user", domain: "d", appName: "app" });
-    await module.createApplicationRecord({ userId: "user", domain: "d", appName: "app", type: "STATIC" });
+    await applicationsModule.listApplicationsByUser("user");
+    await applicationsModule.deleteApplicationRecord({ userId: "user", domain: "d", appName: "app" });
+    await applicationsModule.markApplicationForDeletion({ userId: "user", domain: "d", appName: "app" });
+    await applicationsModule.cancelApplicationDeletion({ userId: "user", domain: "d", appName: "app" });
+    await applicationsModule.createApplicationRecord({ userId: "user", domain: "d", appName: "app", type: "STATIC" });
 
     expect(list).toHaveBeenCalledWith("user");
     expect(del).toHaveBeenCalledWith({ userId: "user", domain: "d", appName: "app" });
@@ -69,37 +69,37 @@ describe("data layer configuration", () => {
   });
 
   it("invoices helpers delegate once configured", async () => {
-    const module = await import("../invoices");
+    const invoicesModule = await import("../invoices");
     const list = vi.fn().mockResolvedValue([]);
     const getUrl = vi.fn().mockResolvedValue("https://example.com");
 
-    module.configureInvoicesDataSource({
+    invoicesModule.configureInvoicesDataSource({
       listByUser: list,
       getInvoiceUrl: getUrl,
     });
 
-    await module.listInvoicesByUser("user");
-    await module.getInvoiceDownloadUrl("user", "invoice.pdf");
+    await invoicesModule.listInvoicesByUser("user");
+    await invoicesModule.getInvoiceDownloadUrl("user", "invoice.pdf");
 
     expect(list).toHaveBeenCalledWith("user");
     expect(getUrl).toHaveBeenCalledWith("user", "invoice.pdf");
   });
 
   it("settings helpers delegate once configured", async () => {
-    const module = await import("../settings");
+    const settingsModule = await import("../settings");
     const getProfile = vi.fn().mockResolvedValue(null);
     const createProfile = vi.fn();
     const updateProfile = vi.fn();
 
-    module.configureSettingsDataSource({
+    settingsModule.configureSettingsDataSource({
       getProfile,
       createProfile,
       updateProfile,
     });
 
-    await module.getUserProfileRecord("user");
-    await module.createUserProfileRecord({ userId: "user" });
-    await module.updateUserProfileRecord({ userId: "user" });
+    await settingsModule.getUserProfileRecord("user");
+    await settingsModule.createUserProfileRecord({ userId: "user" });
+    await settingsModule.updateUserProfileRecord({ userId: "user" });
 
     expect(getProfile).toHaveBeenCalledWith("user");
     expect(createProfile).toHaveBeenCalledWith({ userId: "user" });
