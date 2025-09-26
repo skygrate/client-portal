@@ -4,9 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useCurrentUserId } from "@shared/auth/useCurrentUserId";
-import { useDomains } from "@domain/hooks/useDomains";
-import { getPrefix } from "@domain/services/domains";
-import { getReadyDomains, isDomainReady, pickInitialReadyDomain } from "@domain/utils/readiness";
+import { useDomains, getPrefix, getReadyDomains, isDomainReady, pickInitialReadyDomain } from "@domain";
 import { FilePanel } from "./components/FilePanel";
 
 export default function FilesPage() {

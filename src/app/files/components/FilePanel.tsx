@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useFiles } from "../hooks/useFiles";
+import { useFiles, ensureTrailingSlash, getParentPrefix, isValidFolderName, stripPrefix } from "@files";
 import { uploadFile, deleteAllUnderPrefix } from "@amplify/storage";
 import { FilesToolbar } from "./FilesToolbar";
 import { FilesTable } from "./FilesTable";
 import { UploadArea } from "./UploadArea";
-import { ensureTrailingSlash, getParentPrefix, isValidFolderName, stripPrefix } from "../utils/path";
 
 type Props = {
   prefix: string;

@@ -1,20 +1,20 @@
 "use client";
 
 import { useMemo } from "react";
-import type { DomainItem } from "@domain/types";
-import { getPrefix } from "@domain/services/domains";
+import type { DomainItem } from "@domain";
+import { getPrefix } from "@domain";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
-import { computeStatus } from "@domain/utils/status";
+import { computeStatus } from "@domain";
 import { useAsyncAction } from "@shared/hooks/useAsyncAction";
-import { toErrorMessage } from "@shared/utils/errors";
+import type { ReportErrorInput } from "@shared/hooks/useErrorState";
 
 type Props = {
   domain: DomainItem;
   onDelete: (name: string) => Promise<void>;
   onSoftDelete: (name: string) => Promise<void>;
   onCancelSoftDelete: (name: string) => Promise<void>;
-  onError: (message: string) => void;
+  onError: (input: ReportErrorInput) => void;
 };
 
 export function DomainRow({ domain, onDelete, onSoftDelete, onCancelSoftDelete, onError }: Props) {
@@ -23,7 +23,7 @@ export function DomainRow({ domain, onDelete, onSoftDelete, onCancelSoftDelete, 
   const hardDelete = useAsyncAction({
     confirmMessage: () => t("domain.confirm_delete_domain", { domain: domain.name }),
     action: () => onDelete(domain.name),
-    onError: (err) => onError(toErrorMessage(err, "Failed to delete domain.")),
+    onError: (err) => onError({ error: err, fallback: "Failed to delete domain.", origin: "DomainRow.hardDelete" }),
   });
 
   const softDelete = useAsyncAction({
@@ -32,7 +32,7 @@ export function DomainRow({ domain, onDelete, onSoftDelete, onCancelSoftDelete, 
       if (domain.toBeDeleted) return;
       await onSoftDelete(domain.name);
     },
-    onError: (err) => onError(toErrorMessage(err, "Failed to mark domain for deletion.")),
+    onError: (err) => onError({ error: err, fallback: "Failed to mark domain for deletion.", origin: "DomainRow.softDelete" }),
   });
 
   const cancelSoftDelete = useAsyncAction({
@@ -40,7 +40,7 @@ export function DomainRow({ domain, onDelete, onSoftDelete, onCancelSoftDelete, 
       if (!domain.toBeDeleted) return;
       await onCancelSoftDelete(domain.name);
     },
-    onError: (err) => onError(toErrorMessage(err, "Failed to cancel domain deletion.")),
+    onError: (err) => onError({ error: err, fallback: "Failed to cancel domain deletion.", origin: "DomainRow.cancelSoftDelete" }),
   });
 
   const prefix = useMemo(() => getPrefix(domain), [domain]);

@@ -4,6 +4,7 @@ import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import amplifyOutputs from '../../amplify_outputs.json'; // Gen2 outputs file
 import '../i18n';
+import '@data/client';
 import { I18nextProvider } from 'react-i18next';
 import useIdleLogout from '@shared/auth/useIdleLogout';
 import i18n from '../i18n';

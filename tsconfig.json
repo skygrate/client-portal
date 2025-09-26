@@ -21,8 +21,20 @@
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
+      "@domain": ["./src/shared/domain/index.ts"],
       "@domain/*": ["./src/shared/domain/*"],
-      "@amplify/*": ["./src/shared/amplify/*"]
+      "@applications": ["./src/shared/applications/index.ts"],
+      "@applications/*": ["./src/shared/applications/*"],
+      "@files": ["./src/shared/files/index.ts"],
+      "@files/*": ["./src/shared/files/*"],
+      "@invoices": ["./src/shared/invoices/index.ts"],
+      "@invoices/*": ["./src/shared/invoices/*"],
+      "@settings": ["./src/shared/settings/index.ts"],
+      "@settings/*": ["./src/shared/settings/*"],
+      "@data": ["./src/shared/data/index.ts"],
+      "@data/*": ["./src/shared/data/*"],
+      "@amplify": ["./src/shared/client/amplify/client.ts"],
+      "@amplify/*": ["./src/shared/client/amplify/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

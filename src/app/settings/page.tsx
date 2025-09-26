@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { useCurrentUserId } from "@shared/auth/useCurrentUserId";
-import { useUserProfile } from "./hooks/useUserProfile";
+import { useUserProfile } from "@settings";
 import { SettingsForm } from "./components/SettingsForm";
 
 export default function Settings() {

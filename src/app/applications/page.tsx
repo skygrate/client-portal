@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 import { useCurrentUserId } from "@shared/auth/useCurrentUserId";
-import { useDomains } from "@domain/hooks/useDomains";
+import { useDomains } from "@domain";
 import { CreateTiles } from "./components/CreateTiles";
 import { CreateForm } from "./components/CreateForm";
 import { ApplicationsTable } from "./components/ApplicationsTable";

@@ -1,8 +1,9 @@
 "use client";
 
-import type { DomainItem } from "@domain/types";
+import type { DomainItem } from "@domain";
 import { DomainRow } from "./DomainRow";
 import { useTranslation } from "react-i18next";
+import type { ReportErrorInput } from "@shared/hooks/useErrorState";
 
 type Props = {
   domains: DomainItem[];
@@ -10,7 +11,7 @@ type Props = {
   onDelete: (name: string) => Promise<void>;
   onSoftDelete: (name: string) => Promise<void>;
   onCancelSoftDelete: (name: string) => Promise<void>;
-  onError: (message: string) => void;
+  onError: (input: ReportErrorInput) => void;
 };
 
 export function DomainList({ domains, loading, onDelete, onSoftDelete, onCancelSoftDelete, onError }: Props) {

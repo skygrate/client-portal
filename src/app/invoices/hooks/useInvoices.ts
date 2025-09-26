@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { InvoiceItem } from "../services/invoices";
-import { listInvoicesByUser } from "../services/invoices";
+import type { InvoiceItem } from "@invoices";
+import { listInvoicesByUser } from "@data/invoices";
 
 export function useInvoices(userId: string | null) {
   const [items, setItems] = useState<InvoiceItem[]>([]);
@@ -30,4 +30,3 @@ export function useInvoices(userId: string | null) {
 
   return { items, loading, error, refresh } as const;
 }
-

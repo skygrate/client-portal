@@ -1,5 +1,3 @@
-"use client";
-
 import { amplifyClient } from "@amplify/client";
 import { toRecordArray } from "@shared/utils/amplifyRecords";
 import type { DomainItem } from "../types";

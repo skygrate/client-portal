@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import type { InvoiceItem } from "../services/invoices";
-import { getInvoiceUrl } from "../services/invoices";
+import type { InvoiceItem } from "@invoices";
+import { getInvoiceDownloadUrl } from "@data/invoices";
 
 type Props = {
   userId: string;
@@ -48,7 +48,7 @@ export function InvoicesTable({ userId, items, loading, onError }: Props) {
                   disabled={!inv.fileName}
                   onClick={async () => {
                     try {
-                      const url = await getInvoiceUrl(userId, inv.fileName);
+                      const url = await getInvoiceDownloadUrl(userId, inv.fileName);
                       window.open(url, '_blank', 'noopener,noreferrer');
                     } catch (e: unknown) {
                       onError?.(typeof e === 'object' && e && 'message' in e ? String((e as { message?: string }).message) : 'Failed to open invoice.');

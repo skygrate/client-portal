@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import { displayPrefix } from "../utils/path";
+import { displayPrefix } from "@files";
 
 type Props = {
   currentPrefix: string;

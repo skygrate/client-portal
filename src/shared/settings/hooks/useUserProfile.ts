@@ -1,7 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { createUserProfile, getUserProfile, updateUserProfile, type UserProfileRecord } from "../services/userProfile";
+import type { UserProfileRecord } from "@settings";
+import {
+  getUserProfileRecord,
+  createUserProfileRecord,
+  updateUserProfileRecord,
+} from "@data/settings";
 
 export type UserProfileForm = {
   firstName: string;
@@ -38,7 +43,7 @@ export function useUserProfile(userId: string | null) {
       setLoading(true);
       setError(null);
       try {
-        const data = await getUserProfile(userId);
+        const data = await getUserProfileRecord(userId);
         if (data) {
           if (!cancelled) {
             setProfile({
@@ -53,7 +58,7 @@ export function useUserProfile(userId: string | null) {
           }
         } else {
           // Create a minimal profile if not exists
-          await createUserProfile({ userId, firstName: "" });
+          await createUserProfileRecord({ userId, firstName: "" });
           if (!cancelled) setProfile(emptyForm);
         }
       } catch (e: unknown) {
@@ -74,11 +79,11 @@ export function useUserProfile(userId: string | null) {
   const save = useCallback(async () => {
     if (!userId) throw new Error("User ID not available.");
     const payload: UserProfileRecord = { userId, ...profile };
-    const existing = await getUserProfile(userId);
+    const existing = await getUserProfileRecord(userId);
     if (existing) {
-      await updateUserProfile(payload);
+      await updateUserProfileRecord(payload);
     } else {
-      await createUserProfile(payload);
+      await createUserProfileRecord(payload);
     }
   }, [userId, profile]);
 

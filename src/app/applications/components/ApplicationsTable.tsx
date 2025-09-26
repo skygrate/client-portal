@@ -1,21 +1,21 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import type { ApplicationItem } from "../types";
-import { computeApplicationStatus } from "../utils/status";
-import { useAsyncAction } from "@shared/hooks/useAsyncAction";
-import { toErrorMessage } from "@shared/utils/errors";
+import type { ApplicationItem } from "@applications";
+import { computeApplicationStatus } from "@applications";
 import {
-  deleteApplication,
-  markApplicationForDeletion,
-  unmarkApplicationForDeletion,
-} from "../services/apps";
+  deleteApplicationRecord,
+  markApplicationForDeletion as dataMarkApplicationForDeletion,
+  cancelApplicationDeletion,
+} from "@data/applications";
+import { useAsyncAction } from "@shared/hooks/useAsyncAction";
+import type { ReportErrorInput } from "@shared/hooks/useErrorState";
 
 type Props = {
   apps: ApplicationItem[];
   userId: string | null;
   onChange: () => Promise<void> | void; // callback to refresh data after delete
-  onError?: (msg: string) => void;
+  onError?: (input: ReportErrorInput) => void;
 };
 
 export function ApplicationsTable({ apps, userId, onChange, onError }: Props) {
@@ -71,7 +71,7 @@ type ApplicationRowProps = {
   app: ApplicationItem;
   userId: string | null;
   onChange: () => Promise<void> | void;
-  onError?: (msg: string) => void;
+  onError?: (input: ReportErrorInput) => void;
 };
 
 function ApplicationRow({ app, userId, onChange, onError }: ApplicationRowProps) {
@@ -88,29 +88,29 @@ function ApplicationRow({ app, userId, onChange, onError }: ApplicationRowProps)
     confirmMessage: () => t('applications.confirm_soft_delete', { app: app.appName, domain: app.domain }),
     action: async () => {
       if (!userId || app.toBeDeleted) return;
-      await markApplicationForDeletion({ userId, domain: app.domain, appName: app.appName });
+      await dataMarkApplicationForDeletion({ userId, domain: app.domain, appName: app.appName });
       await onChange();
     },
-    onError: (err) => onError?.(toErrorMessage(err, 'Failed to update application')),
+    onError: (err) => onError?.({ error: err, fallback: 'Failed to update application', origin: 'ApplicationsTable.softDelete' }),
   });
 
   const cancelSoftDelete = useAsyncAction({
     action: async () => {
       if (!userId) return;
-      await unmarkApplicationForDeletion({ userId, domain: app.domain, appName: app.appName });
+      await cancelApplicationDeletion({ userId, domain: app.domain, appName: app.appName });
       await onChange();
     },
-    onError: (err) => onError?.(toErrorMessage(err, 'Failed to cancel deletion')),
+    onError: (err) => onError?.({ error: err, fallback: 'Failed to cancel deletion', origin: 'ApplicationsTable.cancelSoftDelete' }),
   });
 
   const hardDelete = useAsyncAction({
     confirmMessage: () => t('applications.confirm_delete', { app: app.appName, domain: app.domain }),
     action: async () => {
       if (!userId) return;
-      await deleteApplication({ userId, domain: app.domain, appName: app.appName });
+      await deleteApplicationRecord({ userId, domain: app.domain, appName: app.appName });
       await onChange();
     },
-    onError: (err) => onError?.(toErrorMessage(err, 'Failed to delete application')),
+    onError: (err) => onError?.({ error: err, fallback: 'Failed to delete application', origin: 'ApplicationsTable.hardDelete' }),
   });
 
   return (

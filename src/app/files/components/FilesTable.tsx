@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 import { formatBytes, formatDate } from "@shared/utils/format";
-import type { FileItem } from "../types";
+import type { FileItem } from "@files";
 
 type Props = {
   folderNames: string[];
@@ -92,4 +92,3 @@ export function FilesTable({ folderNames, onOpenFolder, deletingFolder, onDelete
 function stripCurrent(path: string, prefix: string) {
   return path.startsWith(prefix) ? path.slice(prefix.length) : path;
 }
-

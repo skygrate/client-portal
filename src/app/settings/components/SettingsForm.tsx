@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import type { UserProfileForm } from "../hooks/useUserProfile";
+import type { UserProfileForm } from "@settings";
 import type { Dispatch, SetStateAction } from "react";
 
 type Props = {

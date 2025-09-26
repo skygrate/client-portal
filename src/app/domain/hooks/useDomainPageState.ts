@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { useDomains } from "@domain/hooks/useDomains";
-import type { DomainItem } from "@domain/types";
+import { useDomains } from "@domain";
+import type { DomainItem } from "@domain";
 import { useErrorState } from "@shared/hooks/useErrorState";
-import { toErrorMessage } from "@shared/utils/errors";
+import type { ReportErrorInput } from "@shared/hooks/useErrorState";
 
 export type DomainPageState = {
   domains: DomainItem[];
@@ -14,13 +14,18 @@ export type DomainPageState = {
   handleDelete: (name: string) => Promise<void>;
   handleSoftDelete: (name: string) => Promise<void>;
   handleCancelSoftDelete: (name: string) => Promise<void>;
-  reportError: (message: string) => void;
+  reportError: (input: ReportErrorInput) => void;
   clearError: () => void;
 };
 
 export function useDomainPageState(userId: string | null): DomainPageState {
   const { domains, loading: domainsLoading, error: domainsError, refresh, create, remove, markForDeletion, cancelDeletion } = useDomains(userId);
-  const { error: localError, reportError, clearError } = useErrorState();
+  const { error: localError, reportError: reportErrorRaw, clearError } = useErrorState();
+
+  const reportError = useCallback(
+    (input: ReportErrorInput) => reportErrorRaw(input),
+    [reportErrorRaw]
+  );
 
   const handleCreate = useCallback(async (name: string) => {
     clearError();
@@ -28,7 +33,7 @@ export function useDomainPageState(userId: string | null): DomainPageState {
       await create(name);
       await refresh();
     } catch (err) {
-      reportError(toErrorMessage(err, 'Failed to create domain'));
+      reportError({ error: err, fallback: 'Failed to create domain', origin: 'useDomainPageState.handleCreate' });
     }
   }, [create, refresh, clearError, reportError]);
 
@@ -38,7 +43,7 @@ export function useDomainPageState(userId: string | null): DomainPageState {
       await remove(name);
       await refresh();
     } catch (err) {
-      reportError(toErrorMessage(err, 'Failed to delete domain'));
+      reportError({ error: err, fallback: 'Failed to delete domain', origin: 'useDomainPageState.handleDelete' });
     }
   }, [remove, refresh, clearError, reportError]);
 
@@ -48,7 +53,7 @@ export function useDomainPageState(userId: string | null): DomainPageState {
       await markForDeletion(name);
       await refresh();
     } catch (err) {
-      reportError(toErrorMessage(err, 'Failed to mark domain for deletion'));
+      reportError({ error: err, fallback: 'Failed to mark domain for deletion', origin: 'useDomainPageState.handleSoftDelete' });
     }
   }, [markForDeletion, refresh, clearError, reportError]);
 
@@ -58,7 +63,7 @@ export function useDomainPageState(userId: string | null): DomainPageState {
       await cancelDeletion(name);
       await refresh();
     } catch (err) {
-      reportError(toErrorMessage(err, 'Failed to cancel domain deletion'));
+      reportError({ error: err, fallback: 'Failed to cancel domain deletion', origin: 'useDomainPageState.handleCancelSoftDelete' });
     }
   }, [cancelDeletion, refresh, clearError, reportError]);
 

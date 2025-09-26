@@ -2,11 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { DomainItem } from "@domain/types";
-import type { ApplicationItem, AppType } from "../types";
-import { createApplication, listAppsByUser } from "../services/apps";
+import type { DomainItem } from "@domain";
+import type { ApplicationItem, AppType } from "@applications";
+import { listApplicationsByUser, createApplicationRecord } from "@data/applications";
 import { useErrorState } from "@shared/hooks/useErrorState";
-import { toErrorMessage } from "@shared/utils/errors";
 
 export type UseApplicationsManagerArgs = {
   userId: string | null;
@@ -38,10 +37,10 @@ export function useApplicationsManager({ userId, domains }: UseApplicationsManag
     setLoading(true);
     clearError();
     try {
-      const res = await listAppsByUser(userId);
+      const res = await listApplicationsByUser(userId);
       setItems(res);
     } catch (e: unknown) {
-      reportError(toErrorMessage(e, 'Failed to load applications'));
+      reportError({ error: e, fallback: 'Failed to load applications', origin: 'useApplicationsManager.refresh' });
     } finally {
       setLoading(false);
     }
@@ -74,11 +73,11 @@ export function useApplicationsManager({ userId, domains }: UseApplicationsManag
       return;
     }
     try {
-      await createApplication({ userId, domain, appName, type, subdomain });
+      await createApplicationRecord({ userId, domain, appName, type, subdomain });
       setCreating(null);
       await refresh();
     } catch (e: unknown) {
-      reportError(toErrorMessage(e, 'Failed to create application'));
+      reportError({ error: e, fallback: 'Failed to create application', origin: 'useApplicationsManager.handleCreate' });
     }
   }, [userId, domains, items, refresh, reportError, t]);
 

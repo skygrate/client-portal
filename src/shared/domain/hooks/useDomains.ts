@@ -2,7 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { DomainItem } from "../types";
-import { createDomain, deleteDomain, getPrefix, listByUser, markDomainForDeletion, unmarkDomainForDeletion } from "../services/domains";
+import { getPrefix } from "@domain/services/domains";
+import {
+  listDomainsByUser,
+  createDomainRecord,
+  markDomainForDeletion as dataMarkDomainForDeletion,
+  cancelDomainDeletion as dataCancelDomainDeletion,
+  deleteDomainRecord,
+} from "@data/domains";
 import { deleteAllUnderPrefix } from "@amplify/storage";
 
 export function useDomains(userId: string | null) {
@@ -15,7 +22,7 @@ export function useDomains(userId: string | null) {
     setLoading(true);
     setError(null);
     try {
-      const list = await listByUser(userId);
+      const list = await listDomainsByUser(userId);
       setDomains(list);
     } catch (e: unknown) {
       const msg = typeof e === 'object' && e && 'message' in e ? String((e as { message?: string }).message) : 'Failed to load domains.';
@@ -32,7 +39,7 @@ export function useDomains(userId: string | null) {
   const create = useCallback(
     async (name: string) => {
       if (!userId) throw new Error("You must be signed in to add domains.");
-      await createDomain(userId, name);
+      await createDomainRecord(userId, name);
     },
     [userId]
   );
@@ -40,7 +47,7 @@ export function useDomains(userId: string | null) {
   const markForDeletion = useCallback(
     async (name: string) => {
       if (!userId) return;
-      await markDomainForDeletion(userId, name);
+      await dataMarkDomainForDeletion(userId, name);
     },
     [userId]
   );
@@ -48,7 +55,7 @@ export function useDomains(userId: string | null) {
   const cancelDeletion = useCallback(
     async (name: string) => {
       if (!userId) return;
-      await unmarkDomainForDeletion(userId, name);
+      await dataCancelDomainDeletion(userId, name);
     },
     [userId]
   );
@@ -59,7 +66,7 @@ export function useDomains(userId: string | null) {
       const d = domains.find((x) => x.name === name);
       const prefix = d ? getPrefix(d) : `public/sites/${userId}/${name}/`;
       await deleteAllUnderPrefix(prefix);
-      await deleteDomain(userId, name);
+      await deleteDomainRecord(userId, name);
     },
     [domains, userId]
   );

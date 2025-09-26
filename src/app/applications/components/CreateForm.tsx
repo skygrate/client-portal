@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { DomainItem } from "@domain/types";
-import { getReadyDomains, isDomainReady, pickInitialReadyDomain } from "@domain/utils/readiness";
-import type { AppType } from "../types";
+import type { DomainItem } from "@domain";
+import { getReadyDomains, isDomainReady, pickInitialReadyDomain } from "@domain";
+import type { AppType } from "@applications";
 
 type Props = {
   domains: DomainItem[];
