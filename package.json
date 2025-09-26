@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest",
     "deps:refresh": "rm -rf node_modules package-lock.json && npm install && npm dedupe"
   },
   "dependencies": {
@@ -44,6 +45,8 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "@testing-library/react": "^14.2.1",
+    "vitest": "^1.6.0"
   }
 }
