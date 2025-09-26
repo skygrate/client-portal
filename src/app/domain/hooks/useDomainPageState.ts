@@ -14,7 +14,7 @@ export type DomainPageState = {
   handleDelete: (name: string) => Promise<void>;
   handleSoftDelete: (name: string) => Promise<void>;
   handleCancelSoftDelete: (name: string) => Promise<void>;
-  reportError: (message: string | null) => void;
+  reportError: (message: string) => void;
   clearError: () => void;
 };
 
