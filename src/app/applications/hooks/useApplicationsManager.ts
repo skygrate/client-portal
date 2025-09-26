@@ -26,8 +26,6 @@ export type UseApplicationsManagerResult = {
   handleCreate: (payload: { domain: string; appName: string; type: AppType; subdomain?: string }) => Promise<void>;
 };
 
-export type AppType = 'STATIC' | 'WORDPRESS';
-
 export function useApplicationsManager({ userId, domains }: UseApplicationsManagerArgs): UseApplicationsManagerResult {
   const { t } = useTranslation();
   const [items, setItems] = useState<ApplicationItem[]>([]);
