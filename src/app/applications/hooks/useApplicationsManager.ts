@@ -20,7 +20,7 @@ export type UseApplicationsManagerResult = {
   creating: AppType | null;
   startCreating: (type: AppType) => void;
   cancelCreating: () => void;
-  reportError: (message: string | null) => void;
+  reportError: (message: string) => void;
   clearError: () => void;
   refresh: () => Promise<void>;
   handleCreate: (payload: { domain: string; appName: string; type: AppType; subdomain?: string }) => Promise<void>;
