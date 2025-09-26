@@ -1,6 +1,6 @@
 "use client";
 
-import { amplifyClient } from "@shared/services/amplifyClient";
+import { amplifyClient } from "@amplify/client";
 
 const client = amplifyClient;
 

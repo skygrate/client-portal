@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { FileItem } from "../types";
-import { deleteFile, listFiles, uploadFile } from "@shared/services/storage";
+import { deleteFile, listFiles, uploadFile } from "@amplify/storage";
 
 const PAGE_SIZE = 50;
 
@@ -67,4 +67,3 @@ export function useFiles(prefix: string) {
 
   return { files, nextToken, loading, uploading, refresh, loadMore, upload, remove } as const;
 }
-

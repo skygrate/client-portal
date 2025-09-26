@@ -21,8 +21,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
-      "@domain/*": ["./src/app/domain/*"],
-      "@settings/*": ["./src/app/settings/*"]
+      "@domain/*": ["./src/shared/domain/*"],
+      "@amplify/*": ["./src/shared/amplify/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

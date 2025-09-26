@@ -1,8 +1,8 @@
 "use client";
 
-import { amplifyClient } from "@shared/services/amplifyClient";
-import { toRecordArray } from "@/shared/utils/amplifyRecords";
-import { uploadFile } from "@shared/services/storage";
+import { amplifyClient } from "@amplify/client";
+import { toRecordArray } from "@shared/utils/amplifyRecords";
+import { uploadFile } from "@amplify/storage";
 import type { ApplicationItem } from "../types";
 import { mapApplicationRecord } from "../utils/mapRecord";
 

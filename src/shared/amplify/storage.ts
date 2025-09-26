@@ -1,10 +1,16 @@
 "use client";
 
 import { list, uploadData, remove } from "aws-amplify/storage";
-import type { FileItem } from "@/app/files/types";
+
+export type StorageFileItem = {
+  path: string;
+  size?: number;
+  lastModified?: string | Date;
+  eTag?: string;
+};
 
 type StorageListParams = { path: string; pageSize?: number; nextToken?: string };
-type StorageListResponse = { items: FileItem[]; nextToken?: string };
+type StorageListResponse = { items: StorageFileItem[]; nextToken?: string };
 
 export async function listFiles(prefix: string, opts?: { pageSize?: number; nextToken?: string }) {
   const resp = await list({

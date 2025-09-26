@@ -1,5 +1,3 @@
-"use client";
-
 export type ApplicationItem = {
   userId: string;
   domain: string;
@@ -11,3 +9,5 @@ export type ApplicationItem = {
   subdomain?: string | null;
   toBeDeleted?: boolean;
 };
+
+export type AppType = 'STATIC' | 'WORDPRESS';

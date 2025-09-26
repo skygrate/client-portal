@@ -1,9 +1,3 @@
-"use client";
+import type { StorageFileItem } from "@amplify/storage";
 
-export type FileItem = {
-  path: string;
-  size?: number;
-  lastModified?: string | Date;
-  eTag?: string;
-};
-
+export type FileItem = StorageFileItem;

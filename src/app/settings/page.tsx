@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { useCurrentUserId } from "../domain/hooks/useCurrentUserId";
+import { useCurrentUserId } from "@shared/auth/useCurrentUserId";
 import { useUserProfile } from "./hooks/useUserProfile";
 import { SettingsForm } from "./components/SettingsForm";
 

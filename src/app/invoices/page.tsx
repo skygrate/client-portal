@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useCurrentUserId } from "@/app/domain/hooks/useCurrentUserId";
+import { useCurrentUserId } from "@shared/auth/useCurrentUserId";
 import { useInvoices } from "./hooks/useInvoices";
 import { InvoicesTable } from "./components/InvoicesTable";
 
@@ -17,7 +17,7 @@ export default function Payment() {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">{t('payment.header', 'Invoices')}</h1>
+      <h1 className="text-2xl font-bold mb-4">{t('invoices.header')}</h1>
 
       {error || localError ? (
         <div className="mb-4 rounded-xl border border-red-300 bg-red-50 p-3 text-red-700">

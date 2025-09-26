@@ -1,9 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { DomainItem } from "../types";
+import type { DomainItem } from "@domain/types";
 import { isValidDomain } from "@shared/utils/format";
 import { useTranslation } from "react-i18next";
+import { toErrorMessage } from "@shared/utils/errors";
 
 type Props = {
   domains: DomainItem[];
@@ -42,8 +43,7 @@ export function AddDomainForm({ domains, disabled, onCreate, onError, onAfterCre
       setDomainInput("");
       onAfterCreate?.();
     } catch (e: unknown) {
-      const msg = extractErrorMessage(e, "Failed to add domain.");
-      onError(msg);
+      onError(toErrorMessage(e, "Failed to add domain."));
     } finally {
       setSubmitting(false);
     }
@@ -81,13 +81,4 @@ export function AddDomainForm({ domains, disabled, onCreate, onError, onAfterCre
       )}
     </div>
   );
-}
-
-function extractErrorMessage(err: unknown, fallback: string) {
-  if (typeof err === "string") return err;
-  if (err && typeof err === "object") {
-    const maybe = err as { message?: string; errors?: Array<{ message?: string }> };
-    return maybe.errors?.[0]?.message || maybe.message || fallback;
-  }
-  return fallback;
 }

@@ -1,13 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
-import type { DomainItem } from "../types";
-import { getPrefix } from "../services/domains";
+import type { DomainItem } from "@domain/types";
+import { getPrefix } from "@domain/services/domains";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
-import { computeStatus } from "../utils/status";
-import { useAsyncAction } from "@/shared/hooks/useAsyncAction";
-import { toErrorMessage } from "@/shared/utils/errors";
+import { computeStatus } from "@domain/utils/status";
+import { useAsyncAction } from "@shared/hooks/useAsyncAction";
+import { toErrorMessage } from "@shared/utils/errors";
 
 type Props = {
   domain: DomainItem;

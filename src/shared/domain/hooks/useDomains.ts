@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { DomainItem } from "../types";
 import { createDomain, deleteDomain, getPrefix, listByUser, markDomainForDeletion, unmarkDomainForDeletion } from "../services/domains";
-import { deleteAllUnderPrefix } from "@shared/services/storage";
+import { deleteAllUnderPrefix } from "@amplify/storage";
 
 export function useDomains(userId: string | null) {
   const [domains, setDomains] = useState<DomainItem[]>([]);

@@ -1,6 +1,6 @@
 "use client";
 
-import { amplifyClient } from "@shared/services/amplifyClient";
+import { amplifyClient } from "@amplify/client";
 import { getUrl } from "aws-amplify/storage";
 import { fetchAuthSession } from "aws-amplify/auth";
 

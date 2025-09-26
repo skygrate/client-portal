@@ -1,5 +1,3 @@
-"use client";
-
 export function formatBytes(n?: number) {
   if (!n && n !== 0) return "—";
   if (n < 1024) return `${n} B`;
@@ -24,4 +22,3 @@ export function isValidDomain(d: string) {
   const re = /^(?!-)(?:[a-z0-9-]{1,63}\.)+[a-z]{2,63}$/i;
   return re.test(d);
 }
-

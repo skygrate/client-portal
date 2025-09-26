@@ -1,5 +1,3 @@
-"use client";
-
 import type { DomainItem } from "../types";
 
 export function isDomainReady(domain: DomainItem | null | undefined): boolean {

@@ -1,5 +1,3 @@
-"use client";
-
 import type { DomainItem } from "../types";
 
 export function mapDomainRecord(record: Record<string, unknown>): DomainItem | null {

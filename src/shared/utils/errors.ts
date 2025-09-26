@@ -1,5 +1,3 @@
-"use client";
-
 export function toErrorMessage(err: unknown, fallback: string): string {
   if (typeof err === "string") return err;
   if (err && typeof err === "object") {

@@ -1,19 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AddDomainForm } from "./components/AddDomainForm";
 import { DomainList } from "./components/DomainList";
-import { useCurrentUserId } from "./hooks/useCurrentUserId";
-import { useDomains } from "./hooks/useDomains";
+import { useCurrentUserId } from "@shared/auth/useCurrentUserId";
+import { useDomainPageState } from "./hooks/useDomainPageState";
 
 export default function Domain() {
   const { t } = useTranslation();
   const { userId, loading: userLoading, error: userError } = useCurrentUserId();
-  const { domains, loading: domainsLoading, error: domainsError, refresh, create, remove, markForDeletion, cancelDeletion } = useDomains(userId);
-  const [localError, setLocalError] = useState<string | null>(null);
+  const {
+    domains,
+    loading: domainsLoading,
+    error: domainError,
+    handleCreate,
+    handleDelete,
+    handleSoftDelete,
+    handleCancelSoftDelete,
+    reportError,
+  } = useDomainPageState(userId);
 
-  const error = localError || userError || domainsError;
+  const error = userError || domainError;
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -22,12 +29,8 @@ export default function Domain() {
       <AddDomainForm
         domains={domains}
         disabled={userLoading}
-        onError={(msg) => setLocalError(msg)}
-        onCreate={async (name) => {
-          setLocalError(null);
-          await create(name);
-          await refresh();
-        }}
+        onError={reportError}
+        onCreate={handleCreate}
       />
 
       {error && (
@@ -37,22 +40,10 @@ export default function Domain() {
       <DomainList
         domains={domains}
         loading={userLoading || domainsLoading}
-        onDelete={async (name) => {
-          setLocalError(null);
-          await remove(name);
-          await refresh();
-        }}
-        onSoftDelete={async (name) => {
-          setLocalError(null);
-          await markForDeletion(name);
-          await refresh();
-        }}
-        onCancelSoftDelete={async (name) => {
-          setLocalError(null);
-          await cancelDeletion(name);
-          await refresh();
-        }}
-        onError={(msg) => setLocalError(msg)}
+        onDelete={handleDelete}
+        onSoftDelete={handleSoftDelete}
+        onCancelSoftDelete={handleCancelSoftDelete}
+        onError={reportError}
       />
     </div>
   );

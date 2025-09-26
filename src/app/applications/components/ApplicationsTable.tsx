@@ -3,8 +3,13 @@
 import { useTranslation } from "react-i18next";
 import type { ApplicationItem } from "../types";
 import { computeApplicationStatus } from "../utils/status";
-import { useAsyncAction } from "@/shared/hooks/useAsyncAction";
-import { toErrorMessage } from "@/shared/utils/errors";
+import { useAsyncAction } from "@shared/hooks/useAsyncAction";
+import { toErrorMessage } from "@shared/utils/errors";
+import {
+  deleteApplication,
+  markApplicationForDeletion,
+  unmarkApplicationForDeletion,
+} from "../services/apps";
 
 type Props = {
   apps: ApplicationItem[];
@@ -83,7 +88,6 @@ function ApplicationRow({ app, userId, onChange, onError }: ApplicationRowProps)
     confirmMessage: () => t('applications.confirm_soft_delete', { app: app.appName, domain: app.domain }),
     action: async () => {
       if (!userId || app.toBeDeleted) return;
-      const { markApplicationForDeletion } = await import('../services/apps');
       await markApplicationForDeletion({ userId, domain: app.domain, appName: app.appName });
       await onChange();
     },
@@ -93,7 +97,6 @@ function ApplicationRow({ app, userId, onChange, onError }: ApplicationRowProps)
   const cancelSoftDelete = useAsyncAction({
     action: async () => {
       if (!userId) return;
-      const { unmarkApplicationForDeletion } = await import('../services/apps');
       await unmarkApplicationForDeletion({ userId, domain: app.domain, appName: app.appName });
       await onChange();
     },
@@ -104,7 +107,6 @@ function ApplicationRow({ app, userId, onChange, onError }: ApplicationRowProps)
     confirmMessage: () => t('applications.confirm_delete', { app: app.appName, domain: app.domain }),
     action: async () => {
       if (!userId) return;
-      const { deleteApplication } = await import('../services/apps');
       await deleteApplication({ userId, domain: app.domain, appName: app.appName });
       await onChange();
     },

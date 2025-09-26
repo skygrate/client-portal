@@ -1,5 +1,3 @@
-"use client";
-
 import type { ApplicationItem } from "../types";
 
 export type ApplicationStatus = "New" | "Online" | "To be deleted";

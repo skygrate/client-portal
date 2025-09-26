@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFiles } from "../hooks/useFiles";
-import { uploadFile, deleteAllUnderPrefix } from "@shared/services/storage";
+import { uploadFile, deleteAllUnderPrefix } from "@amplify/storage";
 import { FilesToolbar } from "./FilesToolbar";
 import { FilesTable } from "./FilesTable";
 import { UploadArea } from "./UploadArea";

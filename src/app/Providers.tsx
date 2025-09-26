@@ -5,7 +5,7 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import amplifyOutputs from '../../amplify_outputs.json'; // Gen2 outputs file
 import '../i18n';
 import { I18nextProvider } from 'react-i18next';
-import useIdleLogout from '../hooks/useIdleLogout';
+import useIdleLogout from '@shared/auth/useIdleLogout';
 import i18n from '../i18n';
 import { Toaster } from 'sonner';
 

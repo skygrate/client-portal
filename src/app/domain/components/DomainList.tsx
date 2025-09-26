@@ -1,6 +1,6 @@
 "use client";
 
-import type { DomainItem } from "../types";
+import type { DomainItem } from "@domain/types";
 import { DomainRow } from "./DomainRow";
 import { useTranslation } from "react-i18next";
 

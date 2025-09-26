@@ -1,5 +1,3 @@
-"use client";
-
 import type { ApplicationItem } from "../types";
 
 export function mapApplicationRecord(record: Record<string, unknown>): ApplicationItem | null {

@@ -1,7 +1,7 @@
 "use client";
 
-import { amplifyClient } from "@shared/services/amplifyClient";
-import { toRecordArray } from "@/shared/utils/amplifyRecords";
+import { amplifyClient } from "@amplify/client";
+import { toRecordArray } from "@shared/utils/amplifyRecords";
 import type { DomainItem } from "../types";
 import { mapDomainRecord } from "../utils/mapRecord";
 

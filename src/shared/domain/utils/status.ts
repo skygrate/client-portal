@@ -1,5 +1,3 @@
-"use client";
-
 import type { DomainItem } from "../types";
 
 export type DomainStatus = "New" | "Ready" | "To be deleted";

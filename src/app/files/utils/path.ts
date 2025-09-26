@@ -1,5 +1,3 @@
-"use client";
-
 export function stripPrefix(path: string, prefix: string) {
   return path.startsWith(prefix) ? path.slice(prefix.length) : path;
 }
